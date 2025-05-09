@@ -32,4 +32,9 @@ public interface AnuncioRepository extends JpaRepository<Anuncio, Long>
     @Transactional
     @Query(value = "SELECT * FROM anuncio WHERE anu_title ILIKE :filtro", nativeQuery = true)
     public List<Anuncio> getAnuncioFiltro(@Param("filtro") String filtro);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE pergunta_anuncio set per_resp = :resposta where per_id = :idPergunta", nativeQuery = true)
+    public void addResposta(String resposta, Long idPergunta);
 }

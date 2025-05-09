@@ -72,6 +72,18 @@ public class AnuncioService {
             return false;
         }
     }
+    public boolean addResposta(String resposta, long id_pergunta)
+    {
+        try
+        {
+            anuncioRepository.addResposta(resposta, id_pergunta);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
 
 
 }

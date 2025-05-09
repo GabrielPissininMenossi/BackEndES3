@@ -72,7 +72,18 @@ public class AnuncioRestController
             return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Pergunta"));
         }
     }
-
+    @GetMapping("add-resposta/{id}/{resposta}")
+    public ResponseEntity<Object> addResposta(@PathVariable (name = "id") long idPergunta, @PathVariable (name = "resposta") String resposta)
+    {
+        if(anuncioService.addResposta(resposta, idPergunta))
+        {
+            return ResponseEntity.noContent().build();
+        }
+        else
+        {
+            return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Resposta"));
+        }
+    }
     @GetMapping("/add-foto")
     public ResponseEntity<Object> addFoto(@RequestParam long id, @RequestParam MultipartFile file) {
         try {
