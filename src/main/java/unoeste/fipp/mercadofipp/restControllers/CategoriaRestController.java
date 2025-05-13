@@ -13,6 +13,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("apis/categoria")
+@CrossOrigin
 public class CategoriaRestController
 {
     @Autowired
