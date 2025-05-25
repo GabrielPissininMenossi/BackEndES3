@@ -1,6 +1,7 @@
 package unoeste.fipp.mercadofipp.restControllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +22,6 @@ public class AnuncioRestController
 {
     @Autowired
     private AnuncioService anuncioService;
-    private final Path root = Paths.get("src/main/resources/uploads");
     @GetMapping
     public ResponseEntity<Object> getAll()
     {
@@ -50,16 +50,22 @@ public class AnuncioRestController
         else
             return ResponseEntity.badRequest().body(new Erro("Nenhum Anuncio Encontrado Com o Filtro Selecionado"));
     }
-    @PostMapping
-    public ResponseEntity<Object> save(@RequestBody Anuncio anuncio)
-    {
-        Anuncio novoAnuncio;
-        novoAnuncio = anuncioService.add(anuncio);
-        if (novoAnuncio != null)
-            return ResponseEntity.ok().body(novoAnuncio);
-        else
-            return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Novo Anuncio"));
+
+    @PostMapping("add-foto/{id}")
+    public ResponseEntity<Object> addFoto(@PathVariable(name = "id") Long idAnuncio, @RequestBody MultipartFile[] fotos) {
+        if (anuncioService.addFoto(fotos, idAnuncio))
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.badRequest().body(new Erro("Erro ao adicionar fotos!"));
     }
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> addAnuncio(@RequestPart("anuncio") Anuncio anuncio, @RequestPart("fotos") MultipartFile[] fotos) {
+        Anuncio novo = anuncioService.save(anuncio, fotos);
+        if (novo != null)
+            return ResponseEntity.ok(anuncio);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao cadastrar anúncio!"));
+    }
+
     @GetMapping("add-pergunta/{id}/{texto}")
     public ResponseEntity<Object> addPergunta(@PathVariable(name = "id") long idAnuncio,@PathVariable(name = "texto") String texto)
     {
@@ -84,23 +90,7 @@ public class AnuncioRestController
             return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Resposta"));
         }
     }
-    @GetMapping("/add-foto")
-    public ResponseEntity<Object> addFoto(@RequestParam long id, @RequestParam MultipartFile file) {
-        try {
 
-            String fileName = file.getOriginalFilename();
-            Files.copy(file.getInputStream(), root.resolve(fileName));
-            if(anuncioService.addFoto(fileName, id));
-            {
-                return ResponseEntity.noContent().build();
-            }
-
-
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Foto"));
-        }
-    }
     @GetMapping("/get-por-usuario/{id}")
     public ResponseEntity<Object> getIdUsuario (@PathVariable long id)
     {
@@ -111,16 +101,7 @@ public class AnuncioRestController
         else
             return ResponseEntity.badRequest().body(new Erro("Nenhum anúncio encontrado com o usuário informado"));
     }
-    @PutMapping
-    public ResponseEntity<Object> update(@RequestBody Anuncio anuncio)
-    {
-        Anuncio novoAnuncio;
-        novoAnuncio = anuncioService.add(anuncio);
-        if (novoAnuncio != null)
-            return ResponseEntity.ok().body(novoAnuncio);
-        else
-            return ResponseEntity.badRequest().body(new Erro("Erro ao Alterar Anuncio"));
-    }
+
 
 
 }

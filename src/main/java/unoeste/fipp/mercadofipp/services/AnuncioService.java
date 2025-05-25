@@ -2,6 +2,7 @@ package unoeste.fipp.mercadofipp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import unoeste.fipp.mercadofipp.entities.Anuncio;
 import unoeste.fipp.mercadofipp.entities.Foto;
 import unoeste.fipp.mercadofipp.entities.Pergunta;
@@ -18,16 +19,27 @@ public class AnuncioService {
     {
         return anuncioRepository.findAll();
     }
-    public Anuncio add(Anuncio anuncio)
-    {
-
-        Anuncio novoAnuncio;
-        novoAnuncio = anuncioRepository.save(anuncio);
-        //agora grave as fotos na tabela de fotos
-        //for...
-        //anuncioRepository.addFoto(...)
+    public Anuncio save(Anuncio anuncio, MultipartFile[] fotos) {
+        Anuncio novoAnuncio = anuncioRepository.save(anuncio);
+        if (novoAnuncio != null)
+            addFoto(fotos, novoAnuncio.getId());
         return novoAnuncio;
+    }
 
+    public boolean addFoto(MultipartFile[] fotos, long id_anuncio) {
+        try {
+            for (MultipartFile foto : fotos) {
+                byte[] bytes = foto.getBytes();
+                String nomeArq = foto.getOriginalFilename();
+                String extensao;
+                int pos = nomeArq.lastIndexOf(".");
+                extensao = nomeArq.substring(pos + 1);
+                anuncioRepository.addFoto(bytes, id_anuncio, extensao);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
     public Anuncio getId(long id)
     {
@@ -60,18 +72,7 @@ public class AnuncioService {
         }
 
     }
-    public boolean addFoto(String nomeArquivo, long id_anuncio)
-    {
-        try
-        {
-            anuncioRepository.addFoto(nomeArquivo, id_anuncio);
-            return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
-    }
+
     public boolean addResposta(String resposta, long id_pergunta)
     {
         try

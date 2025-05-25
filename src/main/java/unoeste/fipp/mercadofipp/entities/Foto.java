@@ -11,24 +11,28 @@ public class Foto
     @Column(name = "fot_id")
     private long id;
     @Column(name = "fot_file")
-    private String nomeArquivo;
+    private byte[] arquivo;
+    @Transient // Atributo não será persistido
+    private String img64;
+    @Column(name = "fot_ext")
+    private String extensao;
     @ManyToOne
     @JoinColumn(name = "anu_id")
     private Anuncio anuncio;
 
-    public Foto(long id, String nomeArquivo, Anuncio anuncio) {
+    public Foto(long id, byte[] arquivo, Anuncio anuncio) {
         this.id = id;
-        this.nomeArquivo = nomeArquivo;
+        this.arquivo = arquivo;
         this.anuncio = anuncio;
     }
 
-    public Foto(String nomeArquivo, Anuncio anuncio) {
-        this.nomeArquivo = nomeArquivo;
+    public Foto(byte[] arquivo, Anuncio anuncio) {
+        this.anuncio = anuncio;
         this.anuncio = anuncio;
     }
 
     public Foto() {
-        this(0L, "", null);
+        this(0L, null, null);
     }
 
     public long getId() {
@@ -39,11 +43,27 @@ public class Foto
         this.id = id;
     }
 
-    public String getNomeArquivo() {
-        return nomeArquivo;
+    public byte[] getArquivo() {
+        return arquivo;
     }
 
-    public void setNomeArquivo(String nomeArquivo) {
-        this.nomeArquivo = nomeArquivo;
+    public void setArquivo(byte[] arquivo) {
+        this.arquivo = arquivo;
+    }
+
+    public String getExtensao() {
+        return extensao;
+    }
+
+    public void setExtensao(String extensao) {
+        this.extensao = extensao;
+    }
+
+    public String getImg64() {
+        return img64;
+    }
+
+    public void setImg64(String img64) {
+        this.img64 = img64;
     }
 }
