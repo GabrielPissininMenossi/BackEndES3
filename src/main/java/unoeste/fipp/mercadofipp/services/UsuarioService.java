@@ -54,7 +54,7 @@ public class UsuarioService {
         if (usuario != null)
         {
             if(usuario.getSenha().equals(senha))
-                token = JWTTokenProvider.getToken(nome, usuario.getNivel());
+                token = JWTTokenProvider.getToken(nome, usuario.getNivel(), usuario.getId());
         }
         return token;
     }
