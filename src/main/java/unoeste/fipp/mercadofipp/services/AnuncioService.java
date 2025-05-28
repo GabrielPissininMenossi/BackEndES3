@@ -92,6 +92,8 @@ public class AnuncioService {
         Anuncio anuncio = anuncioRepository.findById(id).orElse(null);
         if (anuncio != null)
         {
+            anuncioRepository.deleteFoto(id);
+            anuncioRepository.deletePergunta(id);
             anuncioRepository.delete(anuncio);
             return true;
         }

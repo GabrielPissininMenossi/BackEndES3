@@ -36,5 +36,15 @@ public interface AnuncioRepository extends JpaRepository<Anuncio, Long>
     @Modifying
     @Transactional
     @Query(value = "UPDATE pergunta_anuncio set per_resp = :resposta where per_id = :idPergunta", nativeQuery = true)
-    public void addResposta(String resposta, Long idPergunta);
+    public void addResposta(@Param("resposta") String resposta,@Param("idPergunta") Long idPergunta);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM foto_anuncio WHERE anu_id = :idAnuncio", nativeQuery = true)
+    public void deleteFoto(@Param("idAnuncio") Long idAnuncio);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM pergunta_anuncio WHERE anu_id = :idAnuncio", nativeQuery = true)
+    public void deletePergunta(@Param("idAnuncio") Long idAnuncio);
 }
