@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("apis/anuncio")
+@CrossOrigin
 public class AnuncioRestController
 {
     @Autowired
@@ -100,6 +101,14 @@ public class AnuncioRestController
             return ResponseEntity.ok(anuncioList);
         else
             return ResponseEntity.badRequest().body(new Erro("Nenhum anúncio encontrado com o usuário informado"));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteAnuncio(@PathVariable long id)
+    {
+        if (anuncioService.deleteAnuncio(id))
+            return ResponseEntity.noContent().build();
+        else
+            return ResponseEntity.badRequest().body(new Erro("Erro ao Apagar Anuncio"));
     }
 
 

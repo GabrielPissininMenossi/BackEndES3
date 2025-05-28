@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import unoeste.fipp.mercadofipp.entities.Usuario;
 import unoeste.fipp.mercadofipp.repositories.UsuarioRepository;
+import unoeste.fipp.mercadofipp.security.JWTTokenProvider;
 
 import java.util.List;
 @Service
@@ -43,5 +44,18 @@ public class UsuarioService {
         }
         else
             return false;
+    }
+
+    public String logar(String nome, String senha)
+    {
+        Usuario usuario;
+        usuario = usuarioRepository.getUsuarioByNome(nome);
+        String token = null;
+        if (usuario != null)
+        {
+            if(usuario.getSenha().equals(senha))
+                token = JWTTokenProvider.getToken(nome, usuario.getNivel());
+        }
+        return token;
     }
 }

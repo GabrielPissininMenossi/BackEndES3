@@ -87,4 +87,15 @@ public class AnuncioService {
     }
 
 
+    public boolean deleteAnuncio(long id)
+    {
+        Anuncio anuncio = anuncioRepository.findById(id).orElse(null);
+        if (anuncio != null)
+        {
+            anuncioRepository.delete(anuncio);
+            return true;
+        }
+        else
+            return false;
+    }
 }

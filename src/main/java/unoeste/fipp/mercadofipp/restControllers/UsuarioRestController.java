@@ -39,6 +39,16 @@ public class UsuarioRestController {
                 return ResponseEntity.badRequest().body(new Erro("Usuario Não Encontrado"));
 
         }
+        @PostMapping("/logar")
+        public ResponseEntity<Object> logar(@RequestParam String nome, @RequestParam String senha)
+        {
+            String token;
+            token = usuarioService.logar(nome, senha);
+            if (token != null)
+                return ResponseEntity.ok(token);
+            else
+                return ResponseEntity.badRequest().body(new Erro("Email e/ou senha incorreta"));
+        }
         @PostMapping
         public ResponseEntity<Object> addUsuario(@RequestBody Usuario usuario)
         {
