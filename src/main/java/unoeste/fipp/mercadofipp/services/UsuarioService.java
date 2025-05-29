@@ -26,8 +26,16 @@ public class UsuarioService {
     public Usuario save(Usuario usuario)
     {
         try {
-            Usuario novoUsuario = usuarioRepository.save(usuario);
-            return usuarioRepository.save(novoUsuario);
+            Usuario aux = usuarioRepository.getUsuarioByNome(usuario.getNome());
+            if(aux == null)
+            {
+                Usuario novoUsuario = usuarioRepository.save(usuario);
+                return usuarioRepository.save(novoUsuario);
+            }
+            else
+            {
+                return null;
+            }
 
         }catch (Exception e){
             return null;
