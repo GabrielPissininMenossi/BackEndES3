@@ -277,7 +277,7 @@ ALTER TABLE ONLY public.usuario ALTER COLUMN usr_id SET DEFAULT nextval('public.
 -- Data for Name: anuncio; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.anuncio VALUES (1, 'Fonte gamer PC', '2024-10-23', 'Vendo fonte usada para PC com 500W em ótimo estado, marca Corsair', 190.0, 1, 2);
+
 
 
 --
@@ -306,8 +306,7 @@ INSERT INTO public.categoria VALUES (3, 'celulares');
 -- Data for Name: pergunta_anuncio; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.pergunta_anuncio VALUES (1, 'Faz desconto à vista?', 1, 'só se for no PIX');
-INSERT INTO public.pergunta_anuncio VALUES (2, 'Reserva ela para mim.', 1, 'Feito! Manda o PIX para 18-99987-1569');
+
 
 
 --
