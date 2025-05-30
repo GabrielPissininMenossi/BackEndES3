@@ -67,7 +67,7 @@ public class AnuncioRestController
         return ResponseEntity.badRequest().body(new Erro("Erro ao cadastrar anúncio!"));
     }
 
-    @GetMapping("add-pergunta/{id}/{texto}")
+    @PostMapping("add-pergunta/{id}/{texto}")
     public ResponseEntity<Object> addPergunta(@PathVariable(name = "id") long idAnuncio,@PathVariable(name = "texto") String texto)
     {
         if(anuncioService.addPergunta(texto, idAnuncio))
@@ -79,7 +79,7 @@ public class AnuncioRestController
             return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Pergunta"));
         }
     }
-    @GetMapping("add-resposta/{id}/{resposta}")
+    @PostMapping("add-resposta/{id}/{resposta}")
     public ResponseEntity<Object> addResposta(@PathVariable (name = "id") long idPergunta, @PathVariable (name = "resposta") String resposta)
     {
         if(anuncioService.addResposta(resposta, idPergunta))

@@ -316,8 +316,8 @@ INSERT INTO public.pergunta_anuncio VALUES (2, 'Reserva ela para mim.', 1, 'Feit
 -- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.usuario VALUES (1, 'adm', 'adm123', '1');
-INSERT INTO public.usuario VALUES (2, 'jao', 'jao123', '2');
+INSERT INTO public.usuario VALUES (1, 'adm', 'adm123', '0');
+INSERT INTO public.usuario VALUES (2, 'jao', 'jao123', '1');
 
 
 --
