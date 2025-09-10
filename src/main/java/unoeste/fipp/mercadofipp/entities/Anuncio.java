@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "anuncio")
 public class Anuncio
 {
+    //realizando o teste
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "anu_id")
