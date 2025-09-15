@@ -2,13 +2,15 @@ package unoeste.fipp.mercadofipp.entities;
 
 import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
+import unoeste.fipp.mercadofipp.entities.observer.Observer;
+import unoeste.fipp.mercadofipp.entities.observer.Sujeito;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "anuncio")
-public class Anuncio
+public class Anuncio implements Sujeito
 {
     //realizando o teste
     @Id
@@ -23,6 +25,11 @@ public class Anuncio
     private String descricao;
     @Column(name = "anu_price")
     private double preco;
+
+    @Column(name = "anu_est")
+    private int estoque;
+    @Column(name = "anu_peso")
+    private double peso;
 
     @ManyToOne
     @JoinColumn(name = "usr_id")
@@ -121,5 +128,10 @@ public class Anuncio
 
     public void setFoto(List<Foto> foto) {
         this.foto = foto;
+    }
+
+    @Override
+    public void Notificar(Usuario usuario){
+
     }
 }
