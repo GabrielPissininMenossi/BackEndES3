@@ -30,11 +30,10 @@ ALTER SCHEMA public OWNER TO postgres;
 
 SET default_tablespace = '';
 
---
+-- ANUNCIO
 -- TOC entry 196 (class 1259 OID 205115)
 -- Name: anuncio; Type: TABLE; Schema: public; Owner: postgres
 --
-
 CREATE TABLE public.anuncio (
     anu_id integer NOT NULL,
     anu_title character varying(80),
@@ -44,15 +43,11 @@ CREATE TABLE public.anuncio (
     cat_id integer,
     usr_id integer
 );
-
-
 ALTER TABLE public.anuncio OWNER TO postgres;
-
 --
 -- TOC entry 197 (class 1259 OID 205121)
 -- Name: anuncio_anu_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
-
 CREATE SEQUENCE public.anuncio_anu_id_seq
     AS integer
     START WITH 1
@@ -60,37 +55,28 @@ CREATE SEQUENCE public.anuncio_anu_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-
 ALTER SEQUENCE public.anuncio_anu_id_seq OWNER TO postgres;
-
 --
 -- TOC entry 2852 (class 0 OID 0)
 -- Dependencies: 197
 -- Name: anuncio_anu_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
-
 ALTER SEQUENCE public.anuncio_anu_id_seq OWNED BY public.anuncio.anu_id;
 
 
---
+-- CATEGORIA
 -- TOC entry 198 (class 1259 OID 205123)
 -- Name: categoria; Type: TABLE; Schema: public; Owner: postgres
 --
-
 CREATE TABLE public.categoria (
     cat_id integer NOT NULL,
     cat_name character varying(20)
 );
-
-
 ALTER TABLE public.categoria OWNER TO postgres;
-
 --
 -- TOC entry 199 (class 1259 OID 205126)
 -- Name: categoria_cat_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
-
 CREATE SEQUENCE public.categoria_cat_id_seq
     AS integer
     START WITH 1
@@ -98,39 +84,30 @@ CREATE SEQUENCE public.categoria_cat_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-
 ALTER SEQUENCE public.categoria_cat_id_seq OWNER TO postgres;
-
 --
 -- TOC entry 2853 (class 0 OID 0)
 -- Dependencies: 199
 -- Name: categoria_cat_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
-
 ALTER SEQUENCE public.categoria_cat_id_seq OWNED BY public.categoria.cat_id;
 
 
---
+-- FOTO_ANUNCIO
 -- TOC entry 200 (class 1259 OID 205128)
 -- Name: foto_anuncio; Type: TABLE; Schema: public; Owner: postgres
 --
-
 CREATE TABLE public.foto_anuncio (
     fot_id integer NOT NULL,
     fot_file bytea,
     fot_ext character varying(10),
     anu_id integer
 );
-
-
 ALTER TABLE public.foto_anuncio OWNER TO postgres;
-
 --
 -- TOC entry 201 (class 1259 OID 205131)
 -- Name: foto_anuncio_fot_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
-
 CREATE SEQUENCE public.foto_anuncio_fot_id_seq
     AS integer
     START WITH 1
@@ -138,39 +115,30 @@ CREATE SEQUENCE public.foto_anuncio_fot_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-
 ALTER SEQUENCE public.foto_anuncio_fot_id_seq OWNER TO postgres;
-
 --
 -- TOC entry 2854 (class 0 OID 0)
 -- Dependencies: 201
 -- Name: foto_anuncio_fot_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
-
 ALTER SEQUENCE public.foto_anuncio_fot_id_seq OWNED BY public.foto_anuncio.fot_id;
 
 
---
+-- PERGUNTA_ANUNCIO
 -- TOC entry 202 (class 1259 OID 205133)
 -- Name: pergunta_anuncio; Type: TABLE; Schema: public; Owner: postgres
 --
-
 CREATE TABLE public.pergunta_anuncio (
     per_id integer NOT NULL,
     per_text text,
     anu_id integer,
     per_resp text
 );
-
-
 ALTER TABLE public.pergunta_anuncio OWNER TO postgres;
-
 --
 -- TOC entry 203 (class 1259 OID 205139)
 -- Name: pergunta_anuncio_per_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
-
 CREATE SEQUENCE public.pergunta_anuncio_per_id_seq
     AS integer
     START WITH 1
@@ -178,39 +146,30 @@ CREATE SEQUENCE public.pergunta_anuncio_per_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-
 ALTER SEQUENCE public.pergunta_anuncio_per_id_seq OWNER TO postgres;
-
 --
 -- TOC entry 2855 (class 0 OID 0)
 -- Dependencies: 203
 -- Name: pergunta_anuncio_per_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
-
 ALTER SEQUENCE public.pergunta_anuncio_per_id_seq OWNED BY public.pergunta_anuncio.per_id;
 
 
---
+-- USUARIO
 -- TOC entry 204 (class 1259 OID 205141)
 -- Name: usuario; Type: TABLE; Schema: public; Owner: postgres
 --
-
 CREATE TABLE public.usuario (
     usr_id integer NOT NULL,
     usr_name character varying(20),
     usr_pass character varying(10),
     usr_level character varying(1)
 );
-
-
 ALTER TABLE public.usuario OWNER TO postgres;
-
 --
 -- TOC entry 205 (class 1259 OID 205144)
 -- Name: usuario_usr_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
-
 CREATE SEQUENCE public.usuario_usr_id_seq
     AS integer
     START WITH 1
@@ -218,16 +177,12 @@ CREATE SEQUENCE public.usuario_usr_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-
 ALTER SEQUENCE public.usuario_usr_id_seq OWNER TO postgres;
-
 --
 -- TOC entry 2856 (class 0 OID 0)
 -- Dependencies: 205
 -- Name: usuario_usr_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
-
 ALTER SEQUENCE public.usuario_usr_id_seq OWNED BY public.usuario.usr_id;
 
 
@@ -235,7 +190,6 @@ ALTER SEQUENCE public.usuario_usr_id_seq OWNED BY public.usuario.usr_id;
 -- TOC entry 2696 (class 2604 OID 205146)
 -- Name: anuncio anu_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.anuncio ALTER COLUMN anu_id SET DEFAULT nextval('public.anuncio_anu_id_seq'::regclass);
 
 
@@ -243,7 +197,6 @@ ALTER TABLE ONLY public.anuncio ALTER COLUMN anu_id SET DEFAULT nextval('public.
 -- TOC entry 2697 (class 2604 OID 205147)
 -- Name: categoria cat_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.categoria ALTER COLUMN cat_id SET DEFAULT nextval('public.categoria_cat_id_seq'::regclass);
 
 
@@ -251,7 +204,6 @@ ALTER TABLE ONLY public.categoria ALTER COLUMN cat_id SET DEFAULT nextval('publi
 -- TOC entry 2698 (class 2604 OID 205148)
 -- Name: foto_anuncio fot_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.foto_anuncio ALTER COLUMN fot_id SET DEFAULT nextval('public.foto_anuncio_fot_id_seq'::regclass);
 
 
@@ -259,7 +211,6 @@ ALTER TABLE ONLY public.foto_anuncio ALTER COLUMN fot_id SET DEFAULT nextval('pu
 -- TOC entry 2699 (class 2604 OID 205149)
 -- Name: pergunta_anuncio per_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.pergunta_anuncio ALTER COLUMN per_id SET DEFAULT nextval('public.pergunta_anuncio_per_id_seq'::regclass);
 
 
@@ -267,7 +218,6 @@ ALTER TABLE ONLY public.pergunta_anuncio ALTER COLUMN per_id SET DEFAULT nextval
 -- TOC entry 2700 (class 2604 OID 205150)
 -- Name: usuario usr_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.usuario ALTER COLUMN usr_id SET DEFAULT nextval('public.usuario_usr_id_seq'::regclass);
 
 

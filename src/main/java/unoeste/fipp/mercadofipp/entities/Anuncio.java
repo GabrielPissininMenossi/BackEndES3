@@ -1,17 +1,16 @@
 package unoeste.fipp.mercadofipp.entities;
 
 import jakarta.persistence.*;
-import org.springframework.cglib.core.Local;
-import unoeste.fipp.mercadofipp.entities.observer.Observer;
-import unoeste.fipp.mercadofipp.entities.observer.Sujeito;
 
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Essa será a minha classe que irá implementar o
+ * */
 @Entity
 @Table(name = "anuncio")
-public class Anuncio implements Sujeito
-{
+public class Anuncio {
     //realizando o teste
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,14 +32,13 @@ public class Anuncio implements Sujeito
 
     @ManyToOne
     @JoinColumn(name = "usr_id")
-    private Usuario usuario;
+    private Usuario usuario; //quem faz o anúncio
 
     @ManyToOne
     @JoinColumn(name = "cat_id")
     private Categoria categoria;
     @OneToMany(mappedBy = "anuncio")
     private List<Pergunta> perguntas;
-
     @OneToMany(mappedBy = "anuncio")
     private List<Foto> foto;
 
@@ -128,10 +126,5 @@ public class Anuncio implements Sujeito
 
     public void setFoto(List<Foto> foto) {
         this.foto = foto;
-    }
-
-    @Override
-    public void Notificar(Usuario usuario){
-
     }
 }

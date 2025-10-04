@@ -1,11 +1,17 @@
 package unoeste.fipp.mercadofipp.entities;
 
 import jakarta.persistence.*;
+import unoeste.fipp.mercadofipp.entities.interfaces.ItemObserver;
 
+import java.util.List;
+
+/**
+ * Essa classe será avisada sobre uma mudança nos itens que a mesma está observando
+ *    OBSERVER -> ele observa o item
+ * */
 @Entity
 @Table(name = "usuario")
-public class Usuario
-{
+public class Usuario{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usr_id")
@@ -17,11 +23,17 @@ public class Usuario
     @Column(name = "usr_level")
     private String  nivel;
 
+    //Construtores
     public Usuario(Long id, String nome, String senha, String nivel) {
         this.id = id;
         this.nome = nome;
         this.senha = senha;
         this.nivel = nivel;
+    }
+
+    public Usuario(Long id) {
+        this(0L,"","","");
+        this.id = id;
     }
 
     public Usuario() {
@@ -58,5 +70,18 @@ public class Usuario
 
     public void setNivel(String nivel) {
         this.nivel = nivel;
+    }
+
+    //será notificado a todo momento que o estoque for atualizado
+    public void atualizarChegadaProduto(int quantidade) {
+        //essa quantidade é o novo estoque do meu produto
+        System.out.print("Produto comprado. ");
+        System.out.println(quantidade+" em estoque do produto!");
+    }
+
+    public void atualizarVendaProduto(int quantidade){
+        //essa quantidade é o novo estoque do meu produto
+        System.out.print("Produto vendido. ");
+        System.out.println(quantidade+" em estoque do produto!!");
     }
 }
