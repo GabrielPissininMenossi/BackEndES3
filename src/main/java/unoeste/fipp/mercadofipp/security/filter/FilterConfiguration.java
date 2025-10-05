@@ -23,7 +23,7 @@ public class FilterConfiguration {
         bean.setOrder(0);
         return bean;
     }
-
+    /*
     @Bean
     public FilterRegistrationBean<AccessFilter> registrationBean(){
         FilterRegistrationBean<AccessFilter> register = new FilterRegistrationBean<>();
@@ -32,4 +32,5 @@ public class FilterConfiguration {
         register.setOrder(1);
         return register;
     }
+     */
 }

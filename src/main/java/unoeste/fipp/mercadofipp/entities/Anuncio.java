@@ -31,6 +31,11 @@ public class Anuncio {
     @Column(name = "anu_peso")
     private double peso; //peso único
 
+    //observers
+    @ManyToMany
+    @JoinTable(name = "anuncio_observer")  //essa tabela irá conter o muitos para muitos de usuario e item
+    private List<Usuario> observers;
+
     @ManyToOne
     @JoinColumn(name = "usr_id")
     private Usuario usuario; //quem faz o anúncio

@@ -7,13 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import unoeste.fipp.mercadofipp.entities.Anuncio;
 import unoeste.fipp.mercadofipp.entities.Erro;
-import unoeste.fipp.mercadofipp.entities.Foto;
-import unoeste.fipp.mercadofipp.entities.Pergunta;
 import unoeste.fipp.mercadofipp.services.AnuncioService;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -109,7 +104,5 @@ public class AnuncioRestController
         else
             return ResponseEntity.badRequest().body(new Erro("Erro ao Apagar Anuncio"));
     }
-
-
 
 }

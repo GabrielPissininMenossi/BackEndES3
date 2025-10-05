@@ -1,7 +1,6 @@
 package unoeste.fipp.mercadofipp.entities;
 
 import jakarta.persistence.*;
-import unoeste.fipp.mercadofipp.entities.interfaces.ItemObserver;
 
 import java.util.List;
 
@@ -84,4 +83,6 @@ public class Usuario{
         System.out.print("Produto com menos estoque. ");
         System.out.println(quantidade+" em estoque do produto!!");
     }
+
+
 }

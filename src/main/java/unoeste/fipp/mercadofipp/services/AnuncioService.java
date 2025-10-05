@@ -4,11 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import unoeste.fipp.mercadofipp.entities.Anuncio;
-import unoeste.fipp.mercadofipp.entities.Foto;
-import unoeste.fipp.mercadofipp.entities.Pergunta;
 import unoeste.fipp.mercadofipp.repositories.AnuncioRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
