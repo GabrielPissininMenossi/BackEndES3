@@ -5,9 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import unoeste.fipp.mercadofipp.entities.Anuncio;
-import unoeste.fipp.mercadofipp.entities.CCompra;
-import unoeste.fipp.mercadofipp.entities.Erro;
+import unoeste.fipp.mercadofipp.entities.*;
 import unoeste.fipp.mercadofipp.entities.abstratas.Comercio;
 import unoeste.fipp.mercadofipp.services.AnuncioService;
 
@@ -103,29 +101,64 @@ public class AnuncioRestController
             return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Resposta"));
         }
     }
-    @PutMapping("atualizar-estoque/{id}/{qtde}")
-    public ResponseEntity<Object> alterarEstoque(@PathVariable(name = "id") Long id, @PathVariable(name = "qtde") int qtde)
+
+//    @PutMapping("atualizar-estoque/{id}/{qtde}")
+//    public ResponseEntity<Object> alterarEstoque(@PathVariable(name = "id") Long id, @PathVariable(name = "qtde") int qtde)
+//    {
+//        if (qtde > -1)
+//        {
+//            Anuncio anuncio = anuncioService.getId(id);
+//            if (anuncio != null)
+//            {
+//                anuncio.setEstoque(qtde);
+//                anuncioService.save(anuncio,null);
+//                return ResponseEntity.ok(anuncio);
+//            }
+//            else
+//            {
+//                return ResponseEntity.badRequest().body(new Erro("Erro ao Alterar Estoque"));
+//            }
+//        }
+//        else
+//        {
+//            return ResponseEntity.badRequest().body(new Erro("Quantidade Errada"));
+//        }
+//    }
+
+    @PostMapping("/compra/{id}/{qtde}")
+    public ResponseEntity<Object> addEstoque(@PathVariable Long id, @PathVariable int qtde)
     {
-        if (qtde > -1)
+        //qtde será somada com o estoque atual
+        Anuncio anuncio = anuncioService.getId(id);
+        if(anuncio != null && qtde > 0)
         {
-            Anuncio anuncio = anuncioService.getId(id);
-            if (anuncio != null)
+            CCompra compra = new CCompra();
+            compra.atualizarEstoque(anuncio, qtde);
+            if(anuncioService.save(anuncio, null) != null)
             {
-                anuncio.setEstoque(qtde);
-                anuncioService.save(anuncio,null);
                 return ResponseEntity.ok(anuncio);
             }
-            else
+        }
+        return ResponseEntity.badRequest().body(new Erro("Erro ao Cadastrar Nova Venda"));
+    }
+
+    @PostMapping("/venda/{id}/{qtde}")
+    public ResponseEntity<Object> tiraEstoque(@PathVariable Long id, @PathVariable int qtde)
+    {
+        //qtde será subtraída com o estoque atual
+        Anuncio anuncio = anuncioService.getId(id);
+        if(anuncio != null && qtde > 0)
+        {
+            CVenda venda = new CVenda();
+            venda.atualizarEstoque(anuncio, qtde);
+            if(anuncioService.save(anuncio, null) != null)
             {
-                return ResponseEntity.badRequest().body(new Erro("Erro ao Alterar Estoque"));
+                return ResponseEntity.ok(anuncio);
             }
         }
-        else
-        {
-            return ResponseEntity.badRequest().body(new Erro("Quantidade Errada"));
-        }
-
+        return ResponseEntity.badRequest().body(new Erro("Erro ao Cadastrar Nova Venda"));
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAnuncio(@PathVariable long id)
     {

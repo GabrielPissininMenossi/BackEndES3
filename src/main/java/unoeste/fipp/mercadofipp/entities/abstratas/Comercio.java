@@ -12,11 +12,5 @@ public abstract class Comercio {
         atualizarEstoque(anuncio, qtde);
         registrarEstoque(anuncio);
     }
-    protected abstract void atualizarEstoque(Anuncio anuncio, int qtde);
-
-    protected void registrarEstoque(Anuncio anuncio)
-    {
-
-        anuncioRepository.save(anuncio);
-    }
+    public abstract void atualizarEstoque(Anuncio anuncio, int qtde);
 }
