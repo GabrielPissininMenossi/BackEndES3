@@ -3,7 +3,7 @@ package unoeste.fipp.mercadofipp.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="anuncio_observer")
+@Table(name = "anuncio_observer")
 
 public class Anuncio_Observer {
     @Id
@@ -12,11 +12,11 @@ public class Anuncio_Observer {
     private Long id_anuncio_observer;
 
     @ManyToOne
-    @JoinColumn(name="anu_id")
+    @JoinColumn(name = "anu_id")
     private Anuncio anuncio;
 
     @ManyToOne
-    @JoinColumn(name="usr_id")
+    @JoinColumn(name = "usr_id")
     private Usuario usuario;
 
     public Anuncio_Observer(Long id_anuncio_observer, Anuncio anuncio, Usuario usuario) {
@@ -26,7 +26,7 @@ public class Anuncio_Observer {
     }
 
     public Anuncio_Observer() {
-        this(0L,null, null);
+        this(0L, null, null);
     }
 
     public Long getId_anuncio_observer() //chave primária
@@ -45,12 +45,13 @@ public class Anuncio_Observer {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
     public Anuncio getAnuncio()  // estrangeira
     {
         return anuncio;
     }
-    public void setAnuncio(Anuncio anuncio)
-    {
+
+    public void setAnuncio(Anuncio anuncio) {
         this.anuncio = anuncio;
     }
 

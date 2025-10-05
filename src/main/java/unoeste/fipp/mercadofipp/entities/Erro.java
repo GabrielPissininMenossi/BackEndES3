@@ -1,7 +1,6 @@
 package unoeste.fipp.mercadofipp.entities;
 
-public class Erro
-{
+public class Erro {
     private String mensagem;
 
     public Erro(String mensagem) {

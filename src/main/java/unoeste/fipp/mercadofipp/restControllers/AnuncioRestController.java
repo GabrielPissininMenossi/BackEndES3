@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import unoeste.fipp.mercadofipp.entities.*;
-import unoeste.fipp.mercadofipp.entities.abstratas.Comercio;
 import unoeste.fipp.mercadofipp.services.AnuncioService;
 
 import java.util.List;
@@ -14,14 +13,12 @@ import java.util.List;
 @RestController
 @RequestMapping("apis/anuncio")
 @CrossOrigin
-public class AnuncioRestController
-{
+public class AnuncioRestController {
     @Autowired
     private AnuncioService anuncioService;
 
     @GetMapping
-    public ResponseEntity<Object> getAll()
-    {
+    public ResponseEntity<Object> getAll() {
         List<Anuncio> anuncioList = anuncioService.getAll();
         if (anuncioList.size() > 0)
             return ResponseEntity.ok().body(anuncioList);
@@ -30,8 +27,7 @@ public class AnuncioRestController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object>getId(@PathVariable long id)
-    {
+    public ResponseEntity<Object> getId(@PathVariable long id) {
         Anuncio anuncio = anuncioService.getId(id);
         if (anuncio != null)
             return ResponseEntity.ok().body(anuncio);
@@ -40,8 +36,7 @@ public class AnuncioRestController
     }
 
     @GetMapping(value = "/get-anuncio/{filtro}")
-    public ResponseEntity<Object> getAnuncioFiltro(@PathVariable(value = "filtro") String filtro)
-    {
+    public ResponseEntity<Object> getAnuncioFiltro(@PathVariable(value = "filtro") String filtro) {
         List<Anuncio> anuncioList;
         anuncioList = anuncioService.getAnuncioFiltro(filtro);
         if (anuncioList.size() > 0)
@@ -51,9 +46,8 @@ public class AnuncioRestController
     }
 
     @GetMapping("/get-por-usuario/{id}")
-    public ResponseEntity<Object> getIdUsuario (@PathVariable long id)
-    {
-        List <Anuncio> anuncioList;
+    public ResponseEntity<Object> getIdUsuario(@PathVariable long id) {
+        List<Anuncio> anuncioList;
         anuncioList = anuncioService.getIdUsuario(id);
         if (anuncioList.size() > 0)
             return ResponseEntity.ok(anuncioList);
@@ -77,65 +71,31 @@ public class AnuncioRestController
     }
 
     @PostMapping("add-pergunta/{id}/{texto}")
-    public ResponseEntity<Object> addPergunta(@PathVariable(name = "id") long idAnuncio,@PathVariable(name = "texto") String texto)
-    {
-        if(anuncioService.addPergunta(texto, idAnuncio))
-        {
+    public ResponseEntity<Object> addPergunta(@PathVariable(name = "id") long idAnuncio, @PathVariable(name = "texto") String texto) {
+        if (anuncioService.addPergunta(texto, idAnuncio)) {
             return ResponseEntity.noContent().build();
-        }
-        else
-        {
+        } else {
             return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Pergunta"));
         }
     }
 
     @PostMapping("add-resposta/{id}/{resposta}")
-    public ResponseEntity<Object> addResposta(@PathVariable (name = "id") long idPergunta, @PathVariable (name = "resposta") String resposta)
-    {
-        if(anuncioService.addResposta(resposta, idPergunta))
-        {
+    public ResponseEntity<Object> addResposta(@PathVariable(name = "id") long idPergunta, @PathVariable(name = "resposta") String resposta) {
+        if (anuncioService.addResposta(resposta, idPergunta)) {
             return ResponseEntity.noContent().build();
-        }
-        else
-        {
+        } else {
             return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Resposta"));
         }
     }
 
-//    @PutMapping("atualizar-estoque/{id}/{qtde}")
-//    public ResponseEntity<Object> alterarEstoque(@PathVariable(name = "id") Long id, @PathVariable(name = "qtde") int qtde)
-//    {
-//        if (qtde > -1)
-//        {
-//            Anuncio anuncio = anuncioService.getId(id);
-//            if (anuncio != null)
-//            {
-//                anuncio.setEstoque(qtde);
-//                anuncioService.save(anuncio,null);
-//                return ResponseEntity.ok(anuncio);
-//            }
-//            else
-//            {
-//                return ResponseEntity.badRequest().body(new Erro("Erro ao Alterar Estoque"));
-//            }
-//        }
-//        else
-//        {
-//            return ResponseEntity.badRequest().body(new Erro("Quantidade Errada"));
-//        }
-//    }
-
     @PostMapping("/compra/{id}/{qtde}")
-    public ResponseEntity<Object> addEstoque(@PathVariable Long id, @PathVariable int qtde)
-    {
+    public ResponseEntity<Object> addEstoque(@PathVariable Long id, @PathVariable int qtde) {
         //qtde será somada com o estoque atual
         Anuncio anuncio = anuncioService.getId(id);
-        if(anuncio != null && qtde > 0)
-        {
+        if (anuncio != null && qtde > 0) {
             CCompra compra = new CCompra();
             compra.atualizarEstoque(anuncio, qtde);
-            if(anuncioService.save(anuncio, null) != null)
-            {
+            if (anuncioService.save(anuncio, null) != null) {
                 return ResponseEntity.ok(anuncio);
             }
         }
@@ -143,16 +103,13 @@ public class AnuncioRestController
     }
 
     @PostMapping("/venda/{id}/{qtde}")
-    public ResponseEntity<Object> tiraEstoque(@PathVariable Long id, @PathVariable int qtde)
-    {
+    public ResponseEntity<Object> tiraEstoque(@PathVariable Long id, @PathVariable int qtde) {
         //qtde será subtraída com o estoque atual
         Anuncio anuncio = anuncioService.getId(id);
-        if(anuncio != null && qtde > 0)
-        {
+        if (anuncio != null && qtde > 0) {
             CVenda venda = new CVenda();
             venda.atualizarEstoque(anuncio, qtde);
-            if(anuncioService.save(anuncio, null) != null)
-            {
+            if (anuncioService.save(anuncio, null) != null) {
                 return ResponseEntity.ok(anuncio);
             }
         }
@@ -160,8 +117,7 @@ public class AnuncioRestController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteAnuncio(@PathVariable long id)
-    {
+    public ResponseEntity<Object> deleteAnuncio(@PathVariable long id) {
         if (anuncioService.deleteAnuncio(id))
             return ResponseEntity.noContent().build();
         else

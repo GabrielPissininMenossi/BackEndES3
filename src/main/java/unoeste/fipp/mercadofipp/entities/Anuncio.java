@@ -1,18 +1,18 @@
 package unoeste.fipp.mercadofipp.entities;
 
 import jakarta.persistence.*;
-import unoeste.fipp.mercadofipp.entities.abstratas.Comercio;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Essa será a minha classe que irá implementar o
- * */
+ * Essa será a minha classe que irá implementar o Observer
+ *  OBSERVABLE
+ */
 @Entity
 @Table(name = "anuncio")
-public class Anuncio{
+public class Anuncio {
     //realizando o teste
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +48,7 @@ public class Anuncio{
     @OneToMany(mappedBy = "anuncio")
     private List<Foto> foto;
 
-    public Anuncio(Long id, String titulo, LocalDate data, String descricao, double preco, int estoque, double peso ,Categoria categoria, Usuario usuario) {
+    public Anuncio(Long id, String titulo, LocalDate data, String descricao, double preco, int estoque, double peso, Categoria categoria, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
         this.data = data;
@@ -62,7 +62,7 @@ public class Anuncio{
     }
 
     public Anuncio() {
-        this(0L, "", null, "" ,0, 0,0,null, null);
+        this(0L, "", null, "", 0, 0, 0, null, null);
     }
 
     public Long getId() {
@@ -142,7 +142,7 @@ public class Anuncio{
     }
 
     public void setEstoque(int estoque) {
-        if(estoque > -1) //se é uma quantidade válida
+        if (estoque > -1) //se é uma quantidade válida
         {
             //notifico
             notificarObservers(estoque);
@@ -162,39 +162,34 @@ public class Anuncio{
 
     //adicionar observers na minha lista
     public void addObserver(Anuncio_Observer anuncioObserver) {
-        if(!this.observers.contains(anuncioObserver)) {
+        if (!this.observers.contains(anuncioObserver)) {
             observers.add(anuncioObserver);
         }
     }
 
-    public void removeObserver(Anuncio_Observer anuncioObserver)
-    {
-        if (this.observers.contains(anuncioObserver))
-        {
+    public void removeObserver(Anuncio_Observer anuncioObserver) {
+        if (this.observers.contains(anuncioObserver)) {
             this.observers.remove(anuncioObserver);
         }
     }
 
     private void notificarObservers(int quantidade) {
         //avisa os usuários
-        if(this.estoque < quantidade) {
+        if (this.estoque < quantidade) {
             //item foi icrementado
             //  comprei mais
 
             //aviso sobre compra de estoque, mais disponíveis para a venda
-            for(Anuncio_Observer u : this.observers) {
+            for (Anuncio_Observer u : this.observers) {
                 u.getUsuario().atualizarChegadaProduto(quantidade);
             }
-        }
-        else
-        {
-            if(this.estoque > quantidade)
-            {
+        } else {
+            if (this.estoque > quantidade) {
                 //item foi decrementado
                 //  vendi e/ou saiu do estoque
 
                 //aviso sobre venda, estoque acabando
-                for(Anuncio_Observer u : this.observers) {
+                for (Anuncio_Observer u : this.observers) {
                     u.getUsuario().atualizarVendaProduto(quantidade);
                 }
             }

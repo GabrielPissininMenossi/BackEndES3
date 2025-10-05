@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "foto_anuncio")
-public class Foto
-{
+public class Foto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fot_id")

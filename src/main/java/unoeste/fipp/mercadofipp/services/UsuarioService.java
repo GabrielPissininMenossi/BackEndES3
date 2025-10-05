@@ -7,53 +7,50 @@ import unoeste.fipp.mercadofipp.repositories.UsuarioRepository;
 import unoeste.fipp.mercadofipp.security.JWTTokenProvider;
 
 import java.util.List;
+
 @Service
 public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
-    public List<Usuario> getAll()
-    {
+
+    public List<Usuario> getAll() {
         List<Usuario> usuarioList = usuarioRepository.findAll();
         return usuarioList;
     }
-    public Usuario getId(long id)
-    {
+
+    public Usuario getId(long id) {
         Usuario usuario;
         usuario = usuarioRepository.findById(id).orElse(null);
         return usuario;
     }
 
-    public Usuario save(Usuario usuario)
-    {
+    public Usuario save(Usuario usuario) {
         try {
             Usuario aux = usuarioRepository.getUsuarioByNome(usuario.getNome());
-            if(aux == null)
+            if (aux == null)
                 return usuarioRepository.save(usuario);
             return null;
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public boolean delete(Long id)
-    {
+    public boolean delete(Long id) {
         Usuario usuario;
         usuario = usuarioRepository.findById(id).orElse(null);
-        if (usuario != null){
-             usuarioRepository.delete(usuario);
-             return true;
+        if (usuario != null) {
+            usuarioRepository.delete(usuario);
+            return true;
         }
         return false;
     }
 
-    public String logar(String nome, String senha)
-    {
+    public String logar(String nome, String senha) {
         Usuario usuario;
         usuario = usuarioRepository.getUsuarioByNome(nome);
         String token = null;
-        if (usuario != null)
-        {
-            if(usuario.getSenha().equals(senha))
+        if (usuario != null) {
+            if (usuario.getSenha().equals(senha))
                 token = JWTTokenProvider.getToken(nome, usuario.getNivel(), usuario.getId());
         }
         return token;

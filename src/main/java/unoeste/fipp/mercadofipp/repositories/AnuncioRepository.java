@@ -11,12 +11,12 @@ import unoeste.fipp.mercadofipp.entities.Anuncio;
 import java.util.List;
 
 @Repository
-public interface AnuncioRepository extends JpaRepository<Anuncio, Long>
-{
+public interface AnuncioRepository extends JpaRepository<Anuncio, Long> {
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO pergunta_anuncio (per_text, anu_id) VALUES (:texto, :id_anuncio)", nativeQuery = true) // : para inserir variavel
-    public void addPergunta(@Param("texto") String texto,@Param("id_anuncio") long id_anuncio); // por estar em uma interface, não é possivel ter corpo
+    @Query(value = "INSERT INTO pergunta_anuncio (per_text, anu_id) VALUES (:texto, :id_anuncio)", nativeQuery = true)
+    // : para inserir variavel
+    public void addPergunta(@Param("texto") String texto, @Param("id_anuncio") long id_anuncio); // por estar em uma interface, não é possivel ter corpo
 
     @Modifying
     @Transactional
@@ -36,7 +36,7 @@ public interface AnuncioRepository extends JpaRepository<Anuncio, Long>
     @Modifying
     @Transactional
     @Query(value = "UPDATE pergunta_anuncio set per_resp = :resposta where per_id = :idPergunta", nativeQuery = true)
-    public void addResposta(@Param("resposta") String resposta,@Param("idPergunta") Long idPergunta);
+    public void addResposta(@Param("resposta") String resposta, @Param("idPergunta") Long idPergunta);
 
     @Modifying
     @Transactional

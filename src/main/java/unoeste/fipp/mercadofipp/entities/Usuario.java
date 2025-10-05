@@ -6,11 +6,11 @@ import java.util.List;
 
 /**
  * Essa classe será avisada sobre uma mudança nos itens que a mesma está observando
- *    OBSERVER -> ele observa o item
- * */
+ * OBSERVER -> ele observa o anuncio
+ */
 @Entity
 @Table(name = "usuario")
-public class Usuario{
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usr_id")
@@ -20,7 +20,7 @@ public class Usuario{
     @Column(name = "usr_pass")
     private String senha;
     @Column(name = "usr_level")
-    private String  nivel;
+    private String nivel;
 
     //Construtores
     public Usuario(Long id, String nome, String senha, String nivel) {
@@ -31,7 +31,7 @@ public class Usuario{
     }
 
     public Usuario(Long id) {
-        this(0L,"","","");
+        this(0L, "", "", "");
         this.id = id;
     }
 
@@ -74,16 +74,16 @@ public class Usuario{
     //será notificado a todo momento que o estoque for atualizado
     public void atualizarChegadaProduto(int quantidade) {
         //essa quantidade é o novo estoque do meu produto
-        System.out.println("Usuario: "+this.id);
+        System.out.println("Usuario: " + this.id);
         System.out.print("Produto com mais estoque. ");
-        System.out.println(quantidade+" em estoque do produto!");
+        System.out.println(quantidade + " em estoque do produto!");
     }
 
-    public void atualizarVendaProduto(int quantidade){
+    public void atualizarVendaProduto(int quantidade) {
         //essa quantidade é o novo estoque do meu produto
-        System.out.println("Usuario: "+this.id);
+        System.out.println("Usuario: " + this.id);
         System.out.print("Produto com menos estoque. ");
-        System.out.println(quantidade+" em estoque do produto!!");
+        System.out.println(quantidade + " em estoque do produto!!");
     }
 
 

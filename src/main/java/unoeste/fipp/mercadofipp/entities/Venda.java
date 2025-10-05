@@ -28,7 +28,7 @@ public class Venda {
     }
 
     public Venda() {
-        this(0L,null);
+        this(0L, null);
     }
 
     public Long getId() {

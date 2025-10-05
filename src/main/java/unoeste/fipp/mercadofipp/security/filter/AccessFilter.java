@@ -101,7 +101,7 @@ public class AccessFilter implements Filter {
                             forbidden(res);
                         }
                     }
-                } else if (method.equals("POST")){
+                } else if (method.equals("POST")) {
                     // POST add-pergunta e add-resposta
                     if (path.matches("/apis/anuncio/add-pergunta/\\d+/[^/]+") || path.matches("/apis/anuncio/add-resposta/\\d+/[^/]+")) {
                         if (nivel == 0 || nivel == 1) {
@@ -109,20 +109,20 @@ public class AccessFilter implements Filter {
                         } else {
                             forbidden(res);
                         }
-                    } else if (path.contains("/apis/anuncio")){ // POST anúncio normal (ex: criação)
+                    } else if (path.contains("/apis/anuncio")) { // POST anúncio normal (ex: criação)
                         if (nivel == 0 || nivel == 1) {
                             chain.doFilter(request, response);
                         } else {
                             forbidden(res);
                         }
                     }
-                } else if (method.equals("DELETE")){ // DELETE anúncio - só adm
+                } else if (method.equals("DELETE")) { // DELETE anúncio - só adm
                     if (nivel == 0) {
                         chain.doFilter(request, response);
                     } else {
                         forbidden(res);
                     }
-                } else{
+                } else {
                     // Caso nenhum critério casou, nega acesso
                     forbidden(res);
                 }

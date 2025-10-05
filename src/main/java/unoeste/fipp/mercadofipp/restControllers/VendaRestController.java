@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import unoeste.fipp.mercadofipp.entities.Erro;
-import unoeste.fipp.mercadofipp.entities.Item;
 
 import unoeste.fipp.mercadofipp.entities.Venda;
 import unoeste.fipp.mercadofipp.services.VendaService;
@@ -15,14 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("apis/item")
 @CrossOrigin
-public class VendaRestController
-{
+public class VendaRestController {
     @Autowired
     private VendaService vendaService;
 
     @GetMapping
-    public ResponseEntity<Object> getAll()
-    {
+    public ResponseEntity<Object> getAll() {
         List<Venda> itemList = vendaService.getAll();
         if (itemList.size() > 0)
             return ResponseEntity.ok().body(itemList);
@@ -31,28 +28,25 @@ public class VendaRestController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getId(@PathVariable long id)
-    {
+    public ResponseEntity<Object> getId(@PathVariable long id) {
         Venda venda = vendaService.getId(id);
         if (venda != null)
             return ResponseEntity.ok().body(venda);
         else
             return ResponseEntity.badRequest().body(new Erro("Venda Não Encontrada"));
     }
+
     @PostMapping
-    public ResponseEntity<Object> addVenda(@RequestBody Venda venda)
-    {
+    public ResponseEntity<Object> addVenda(@RequestBody Venda venda) {
         Venda novaVenda = vendaService.save(venda);
-        if(novaVenda != null)
-        {
+        if (novaVenda != null) {
             return ResponseEntity.ok(venda);
-        }
-        else
+        } else
             return ResponseEntity.badRequest().body(new Erro("Erro ao Cadastrar Nova Venda"));
     }
+
     @PutMapping
-    public ResponseEntity<Object> updateVenda(@RequestBody Venda venda)
-    {
+    public ResponseEntity<Object> updateVenda(@RequestBody Venda venda) {
         Venda novaVenda = vendaService.save(venda);
         if (novaVenda != null)
             return ResponseEntity.ok(novaVenda);
@@ -62,13 +56,10 @@ public class VendaRestController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteItem(@PathVariable("id") Long id)
-    {
-        if(vendaService.delete(id))
-        {
+    public ResponseEntity<Object> deleteItem(@PathVariable("id") Long id) {
+        if (vendaService.delete(id)) {
             return ResponseEntity.noContent().build();
-        }
-        else
+        } else
             return ResponseEntity.badRequest().body(new Erro("Erro ao Apagar Venda"));
     }
 }

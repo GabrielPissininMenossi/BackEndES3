@@ -14,55 +14,52 @@ public class JWTTokenProvider {
     private static final SecretKey CHAVE = Keys.hmacShaKeyFor(
             "MINHACHAVESECRETA_MINHACHAVESECRETA".getBytes(StandardCharsets.UTF_8));
 
-    static public String getToken(String usuario,String nivel, long cod_usuario)
-    {
+    static public String getToken(String usuario, String nivel, long cod_usuario) {
         String jwtToken = Jwts.builder()
-        .setSubject("usuario")
-        .setIssuer("localhost:8080")
-        .claim("usuario", usuario)
-        .claim("privilegio", nivel)
-        .claim("cod_usuario", cod_usuario)
-        .setIssuedAt(new Date())
-        .setExpiration(Date.from(LocalDateTime.now().plusMinutes(45L)
-                .atZone(ZoneId.systemDefault()).toInstant()))
-        .signWith(CHAVE)
-        .compact();
+                .setSubject("usuario")
+                .setIssuer("localhost:8080")
+                .claim("usuario", usuario)
+                .claim("privilegio", nivel)
+                .claim("cod_usuario", cod_usuario)
+                .setIssuedAt(new Date())
+                .setExpiration(Date.from(LocalDateTime.now().plusMinutes(45L)
+                        .atZone(ZoneId.systemDefault()).toInstant()))
+                .signWith(CHAVE)
+                .compact();
 
         return jwtToken;
     }
 
-    static public boolean verifyToken(String token)
-    {
+    static public boolean verifyToken(String token) {
         try {
             Claims claims = JWTTokenProvider.getAllClaimsFromToken(token);
             if (claims.get("privilegio").equals("0") || claims.get("privilegio").equals("1")) // necessita estar logado
             {
                 Jwts.parserBuilder()
-                .setSigningKey(CHAVE)
-                .build()
-                .parseClaimsJws(token).getSignature();
+                        .setSigningKey(CHAVE)
+                        .build()
+                        .parseClaimsJws(token).getSignature();
                 return true;
             }
 
-       } catch (Exception e) {
-                System.out.println(e);
-       }
-       return false;       
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return false;
     }
 
-    static public Claims getAllClaimsFromToken(String token) 
-    {
-        Claims claims=null;
+    static public Claims getAllClaimsFromToken(String token) {
+        Claims claims = null;
         try {
             claims = Jwts.parserBuilder()
-            .setSigningKey(CHAVE)
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
+                    .setSigningKey(CHAVE)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (Exception e) {
             System.out.println("Erro ao recuperar as informações (claims)");
         }
-        return claims;        
+        return claims;
     }
 
 }

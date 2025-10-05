@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import unoeste.fipp.mercadofipp.entities.Categoria;
 
 @Repository
-public interface CategoriaRepository extends JpaRepository<Categoria, Long>
-{
+public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 
 }

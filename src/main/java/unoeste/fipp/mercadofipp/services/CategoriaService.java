@@ -9,42 +9,37 @@ import unoeste.fipp.mercadofipp.entities.Erro;
 import unoeste.fipp.mercadofipp.repositories.CategoriaRepository;
 
 import java.util.List;
+
 @Service
-public class CategoriaService
-{
+public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
-    public List<Categoria> getAll()
-    {
+
+    public List<Categoria> getAll() {
         return categoriaRepository.findAll();
     }
 
-    public Categoria getId(long id)
-    {
+    public Categoria getId(long id) {
         return categoriaRepository.findById(id).orElse(null);
     }
-    public Categoria save(Categoria categoria)
-    {
-        try{
+
+    public Categoria save(Categoria categoria) {
+        try {
             Categoria novaCategoria = categoriaRepository.save(categoria);
             return categoriaRepository.save(novaCategoria);
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
 
     }
 
-    public boolean delete(Long id)
-    {
+    public boolean delete(Long id) {
         Categoria categoria = categoriaRepository.findById(id).orElse(null);
-        if (categoria != null)
-        {
+        if (categoria != null) {
             categoriaRepository.delete(categoria);
             return true;
-        }
-        else
+        } else
             return false;
 
     }

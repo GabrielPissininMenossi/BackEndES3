@@ -14,14 +14,12 @@ import java.util.Objects;
 @RestController
 @RequestMapping("apis/categoria")
 @CrossOrigin
-public class CategoriaRestController
-{
+public class CategoriaRestController {
     @Autowired
     private CategoriaService categoriaService;
 
     @GetMapping
-    public ResponseEntity<Object> getAll()
-    {
+    public ResponseEntity<Object> getAll() {
         List<Categoria> categoriaList = categoriaService.getAll();
         if (categoriaList.size() > 0)
             return ResponseEntity.ok(categoriaList);
@@ -29,9 +27,9 @@ public class CategoriaRestController
             return ResponseEntity.badRequest().body(new Erro("Nenhuma Categoria Encontrada"));
 
     }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Object> getId(@PathVariable (value = "id") long id)
-    {
+    public ResponseEntity<Object> getId(@PathVariable(value = "id") long id) {
         Categoria categoria = categoriaService.getId(id);
         if (categoria != null)
             return ResponseEntity.ok(categoria);
@@ -39,18 +37,18 @@ public class CategoriaRestController
             return ResponseEntity.badRequest().body(new Erro("Categoria Não Encontrada"));
 
     }
+
     @PostMapping
-    public ResponseEntity<Object> addCategoria(@RequestBody Categoria categoria)
-    {
+    public ResponseEntity<Object> addCategoria(@RequestBody Categoria categoria) {
         Categoria novaCategoria = categoriaService.save(categoria);
-        if(novaCategoria != null)
+        if (novaCategoria != null)
             return ResponseEntity.ok(novaCategoria);
         else
             return ResponseEntity.badRequest().body(new Erro("Erro ao Cadastrar Nova Categoria"));
     }
+
     @PutMapping
-    public ResponseEntity<Object> updateCategoria(@RequestBody Categoria categoria)
-    {
+    public ResponseEntity<Object> updateCategoria(@RequestBody Categoria categoria) {
         Categoria novaCategoria;
         novaCategoria = categoriaService.save(categoria);
         if (novaCategoria != null)
@@ -59,15 +57,13 @@ public class CategoriaRestController
             return ResponseEntity.badRequest().body(new Erro("Erro ao Alterar Categoria"));
 
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteCategoria(@PathVariable("id") Long id)
-    {
 
-        if(categoriaService.delete(id))
-        {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteCategoria(@PathVariable("id") Long id) {
+
+        if (categoriaService.delete(id)) {
             return ResponseEntity.noContent().build();
-        }
-        else
+        } else
             return ResponseEntity.badRequest().body(new Erro("Erro ao Apagar Categoria"));
     }
 }
