@@ -3,6 +3,7 @@ package unoeste.fipp.mercadofipp.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class Anuncio {
     @Column(name = "anu_est")
     private int estoque;
     @Column(name = "anu_peso")
-    private double peso;
+    private double peso; //peso único
 
     @ManyToOne
     @JoinColumn(name = "usr_id")
@@ -50,6 +51,7 @@ public class Anuncio {
         this.preco = preco;
         this.usuario = usuario;
         this.categoria = categoria;
+        this.observers = new ArrayList<>();
     }
 
     public Anuncio() {
@@ -127,4 +129,61 @@ public class Anuncio {
     public void setFoto(List<Foto> foto) {
         this.foto = foto;
     }
+
+    public int getEstoque() {
+        return estoque;
+    }
+
+    public void setEstoque(int estoque) {
+        if(estoque > -1) //se é uma quantidade válida
+        {
+            //notifico
+            notificarObservers(estoque);
+
+            //atualiza a informação da quantidade
+            this.estoque = estoque;
+        }
+    }
+
+    //adicionar observers na minha lista
+    public void addObserver(Usuario usuario) {
+        if(!this.observers.contains(usuario)) {
+            observers.add(usuario);
+        }
+    }
+
+    public void removeObserver(Usuario usuario)
+    {
+        if (this.observers.contains(usuario))
+        {
+            this.observers.remove(usuario);
+        }
+    }
+
+    private void notificarObservers(int quantidade) {
+        //avisa os usuários
+        if(this.estoque < quantidade) {
+            //item foi icrementado
+            //  comprei mais
+
+            //aviso sobre compra de estoque, mais disponíveis para a venda
+            for(Usuario u : this.observers) {
+                u.atualizarChegadaProduto(quantidade);
+            }
+        }
+        else
+        {
+            if(this.estoque > quantidade)
+            {
+                //item foi decrementado
+                //  vendi e/ou saiu do estoque
+
+                //aviso sobre venda, estoque acabando
+                for(Usuario u : this.observers) {
+                    u.atualizarVendaProduto(quantidade);
+                }
+            }
+        }
+    }
+
 }

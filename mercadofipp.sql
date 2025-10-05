@@ -185,6 +185,13 @@ ALTER SEQUENCE public.usuario_usr_id_seq OWNER TO postgres;
 --
 ALTER SEQUENCE public.usuario_usr_id_seq OWNED BY public.usuario.usr_id;
 
+--anuncio_observer
+create table public.anuncio_observer (
+    anu_obs_id integer not null,
+    usr_id integer not null,
+    anu_id integer not null
+)
+
 
 --
 -- TOC entry 2696 (class 2604 OID 205146)
@@ -274,7 +281,6 @@ INSERT INTO public.usuario VALUES (2, 'jao', 'jao123', '1');
 -- Dependencies: 197
 -- Name: anuncio_anu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
-
 SELECT pg_catalog.setval('public.anuncio_anu_id_seq', 1, true);
 
 
@@ -283,7 +289,6 @@ SELECT pg_catalog.setval('public.anuncio_anu_id_seq', 1, true);
 -- Dependencies: 199
 -- Name: categoria_cat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
-
 SELECT pg_catalog.setval('public.categoria_cat_id_seq', 4, true);
 
 
@@ -292,7 +297,6 @@ SELECT pg_catalog.setval('public.categoria_cat_id_seq', 4, true);
 -- Dependencies: 201
 -- Name: foto_anuncio_fot_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
-
 SELECT pg_catalog.setval('public.foto_anuncio_fot_id_seq', 1, false);
 
 
@@ -301,7 +305,6 @@ SELECT pg_catalog.setval('public.foto_anuncio_fot_id_seq', 1, false);
 -- Dependencies: 203
 -- Name: pergunta_anuncio_per_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
-
 SELECT pg_catalog.setval('public.pergunta_anuncio_per_id_seq', 2, true);
 
 
@@ -310,7 +313,6 @@ SELECT pg_catalog.setval('public.pergunta_anuncio_per_id_seq', 2, true);
 -- Dependencies: 205
 -- Name: usuario_usr_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
-
 SELECT pg_catalog.setval('public.usuario_usr_id_seq', 2, true);
 
 
@@ -318,7 +320,6 @@ SELECT pg_catalog.setval('public.usuario_usr_id_seq', 2, true);
 -- TOC entry 2702 (class 2606 OID 205152)
 -- Name: anuncio anuncio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.anuncio
     ADD CONSTRAINT anuncio_pkey PRIMARY KEY (anu_id);
 
@@ -327,7 +328,6 @@ ALTER TABLE ONLY public.anuncio
 -- TOC entry 2704 (class 2606 OID 205154)
 -- Name: categoria categoria_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.categoria
     ADD CONSTRAINT categoria_pkey PRIMARY KEY (cat_id);
 
@@ -336,7 +336,6 @@ ALTER TABLE ONLY public.categoria
 -- TOC entry 2706 (class 2606 OID 205156)
 -- Name: foto_anuncio foto_anuncio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.foto_anuncio
     ADD CONSTRAINT foto_anuncio_pkey PRIMARY KEY (fot_id);
 
@@ -345,7 +344,6 @@ ALTER TABLE ONLY public.foto_anuncio
 -- TOC entry 2708 (class 2606 OID 205158)
 -- Name: pergunta_anuncio pergunta_anuncio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.pergunta_anuncio
     ADD CONSTRAINT pergunta_anuncio_pkey PRIMARY KEY (per_id);
 
@@ -354,7 +352,6 @@ ALTER TABLE ONLY public.pergunta_anuncio
 -- TOC entry 2710 (class 2606 OID 205160)
 -- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.usuario
     ADD CONSTRAINT usuario_pkey PRIMARY KEY (usr_id);
 
@@ -363,7 +360,6 @@ ALTER TABLE ONLY public.usuario
 -- TOC entry 2711 (class 2606 OID 205171)
 -- Name: anuncio anuncio_cat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.anuncio
     ADD CONSTRAINT anuncio_cat_id_fkey FOREIGN KEY (cat_id) REFERENCES public.categoria(cat_id) NOT VALID;
 
@@ -372,7 +368,6 @@ ALTER TABLE ONLY public.anuncio
 -- TOC entry 2712 (class 2606 OID 205176)
 -- Name: anuncio anuncio_usr_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.anuncio
     ADD CONSTRAINT anuncio_usr_id_fkey FOREIGN KEY (usr_id) REFERENCES public.usuario(usr_id) NOT VALID;
 
@@ -381,7 +376,6 @@ ALTER TABLE ONLY public.anuncio
 -- TOC entry 2713 (class 2606 OID 205161)
 -- Name: foto_anuncio foto_anuncio_anu_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.foto_anuncio
     ADD CONSTRAINT foto_anuncio_anu_id_fkey FOREIGN KEY (anu_id) REFERENCES public.anuncio(anu_id);
 
@@ -390,7 +384,6 @@ ALTER TABLE ONLY public.foto_anuncio
 -- TOC entry 2714 (class 2606 OID 205166)
 -- Name: pergunta_anuncio pergunta_anuncio_anu_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
-
 ALTER TABLE ONLY public.pergunta_anuncio
     ADD CONSTRAINT pergunta_anuncio_anu_id_fkey FOREIGN KEY (anu_id) REFERENCES public.anuncio(anu_id);
 
@@ -400,7 +393,6 @@ ALTER TABLE ONLY public.pergunta_anuncio
 -- Dependencies: 6
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
-
 REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 

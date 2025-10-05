@@ -75,13 +75,13 @@ public class Usuario{
     //será notificado a todo momento que o estoque for atualizado
     public void atualizarChegadaProduto(int quantidade) {
         //essa quantidade é o novo estoque do meu produto
-        System.out.print("Produto comprado. ");
+        System.out.print("Produto com mais estoque. ");
         System.out.println(quantidade+" em estoque do produto!");
     }
 
     public void atualizarVendaProduto(int quantidade){
         //essa quantidade é o novo estoque do meu produto
-        System.out.print("Produto vendido. ");
+        System.out.print("Produto com menos estoque. ");
         System.out.println(quantidade+" em estoque do produto!!");
     }
 }

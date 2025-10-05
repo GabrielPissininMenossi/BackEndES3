@@ -23,6 +23,7 @@ public class AnuncioRestController
 {
     @Autowired
     private AnuncioService anuncioService;
+
     @GetMapping
     public ResponseEntity<Object> getAll()
     {
@@ -51,6 +52,16 @@ public class AnuncioRestController
         else
             return ResponseEntity.badRequest().body(new Erro("Nenhum Anuncio Encontrado Com o Filtro Selecionado"));
     }
+    @GetMapping("/get-por-usuario/{id}")
+    public ResponseEntity<Object> getIdUsuario (@PathVariable long id)
+    {
+        List <Anuncio> anuncioList;
+        anuncioList = anuncioService.getIdUsuario(id);
+        if (anuncioList.size() > 0)
+            return ResponseEntity.ok(anuncioList);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Nenhum anúncio encontrado com o usuário informado"));
+    }
 
     @PostMapping("add-foto/{id}")
     public ResponseEntity<Object> addFoto(@PathVariable(name = "id") Long idAnuncio, @RequestBody MultipartFile[] fotos) {
@@ -58,7 +69,6 @@ public class AnuncioRestController
             return ResponseEntity.noContent().build();
         return ResponseEntity.badRequest().body(new Erro("Erro ao adicionar fotos!"));
     }
-
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> addAnuncio(@RequestPart("anuncio") Anuncio anuncio, @RequestPart("fotos") MultipartFile[] fotos) {
         Anuncio novo = anuncioService.save(anuncio, fotos);
@@ -66,7 +76,6 @@ public class AnuncioRestController
             return ResponseEntity.ok(anuncio);
         return ResponseEntity.badRequest().body(new Erro("Erro ao cadastrar anúncio!"));
     }
-
     @PostMapping("add-pergunta/{id}/{texto}")
     public ResponseEntity<Object> addPergunta(@PathVariable(name = "id") long idAnuncio,@PathVariable(name = "texto") String texto)
     {
@@ -92,16 +101,6 @@ public class AnuncioRestController
         }
     }
 
-    @GetMapping("/get-por-usuario/{id}")
-    public ResponseEntity<Object> getIdUsuario (@PathVariable long id)
-    {
-        List <Anuncio> anuncioList;
-        anuncioList = anuncioService.getIdUsuario(id);
-        if (anuncioList.size() > 0)
-            return ResponseEntity.ok(anuncioList);
-        else
-            return ResponseEntity.badRequest().body(new Erro("Nenhum anúncio encontrado com o usuário informado"));
-    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAnuncio(@PathVariable long id)
     {
