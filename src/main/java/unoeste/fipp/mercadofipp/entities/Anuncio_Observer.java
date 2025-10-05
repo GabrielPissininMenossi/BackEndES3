@@ -12,13 +12,11 @@ public class Anuncio_Observer {
     private Long id_anuncio_observer;
 
     @ManyToOne
-    @JoinColumn(name="anuncio")
-    @Column(name = "anu_id")
+    @JoinColumn(name="anu_id")
     private Anuncio anuncio;
 
     @ManyToOne
-    @JoinColumn(name="usuario")
-    @Column(name = "usr_id")
+    @JoinColumn(name="usr_id")
     private Usuario usuario;
 
     public Anuncio_Observer(Long id_anuncio_observer, Anuncio anuncio, Usuario usuario) {

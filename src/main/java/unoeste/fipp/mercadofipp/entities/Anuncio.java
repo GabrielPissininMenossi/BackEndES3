@@ -32,9 +32,8 @@ public class Anuncio {
     private double peso; //peso único
 
     //observers
-    @ManyToMany
-    @JoinTable(name = "anuncio_observer")  //essa tabela irá conter o muitos para muitos de usuario e item
-    private List<Usuario> observers;
+    @OneToMany(mappedBy = "anuncio")//essa tabela irá conter o muitos para muitos de usuario e item
+    private List<Anuncio_Observer> observers;
 
     @ManyToOne
     @JoinColumn(name = "usr_id")
@@ -48,7 +47,7 @@ public class Anuncio {
     @OneToMany(mappedBy = "anuncio")
     private List<Foto> foto;
 
-    public Anuncio(Long id, String titulo, LocalDate data, String descricao, double preco, Categoria categoria, Usuario usuario) {
+    public Anuncio(Long id, String titulo, LocalDate data, String descricao, double preco, int estoque, double peso ,Categoria categoria, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
         this.data = data;
@@ -57,10 +56,12 @@ public class Anuncio {
         this.usuario = usuario;
         this.categoria = categoria;
         this.observers = new ArrayList<>();
+        this.peso = peso;
+        this.estoque = estoque;
     }
 
     public Anuncio() {
-        this(0L, "", null, "" ,0, null, null);
+        this(0L, "", null, "" ,0, 0,0,null, null);
     }
 
     public Long getId() {
@@ -151,17 +152,17 @@ public class Anuncio {
     }
 
     //adicionar observers na minha lista
-    public void addObserver(Usuario usuario) {
-        if(!this.observers.contains(usuario)) {
-            observers.add(usuario);
+    public void addObserver(Anuncio_Observer anuncioObserver) {
+        if(!this.observers.contains(anuncioObserver)) {
+            observers.add(anuncioObserver);
         }
     }
 
-    public void removeObserver(Usuario usuario)
+    public void removeObserver(Anuncio_Observer anuncioObserver)
     {
-        if (this.observers.contains(usuario))
+        if (this.observers.contains(anuncioObserver))
         {
-            this.observers.remove(usuario);
+            this.observers.remove(anuncioObserver);
         }
     }
 
@@ -172,8 +173,8 @@ public class Anuncio {
             //  comprei mais
 
             //aviso sobre compra de estoque, mais disponíveis para a venda
-            for(Usuario u : this.observers) {
-                u.atualizarChegadaProduto(quantidade);
+            for(Anuncio_Observer u : this.observers) {
+                u.getUsuario().atualizarChegadaProduto(quantidade);
             }
         }
         else
@@ -184,11 +185,18 @@ public class Anuncio {
                 //  vendi e/ou saiu do estoque
 
                 //aviso sobre venda, estoque acabando
-                for(Usuario u : this.observers) {
-                    u.atualizarVendaProduto(quantidade);
+                for(Anuncio_Observer u : this.observers) {
+                    u.getUsuario().atualizarVendaProduto(quantidade);
                 }
             }
         }
     }
 
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
+    }
 }

@@ -95,7 +95,30 @@ public class AnuncioRestController
             return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Resposta"));
         }
     }
+    @PutMapping("atualizar-estoque/{id}/{qtde}")
+    public ResponseEntity<Object> alterarEstoque(@PathVariable(name = "id") Long id, @PathVariable(name = "qtde") int qtde)
+    {
+        if (qtde > -1)
+        {
+            Anuncio anuncio = anuncioService.getId(id);
+            if (anuncio != null)
+            {
+                anuncio.setEstoque(qtde);
+                anuncioService.save(anuncio,null);
+                return ResponseEntity.ok(anuncio);
 
+            }
+            else
+            {
+                return ResponseEntity.badRequest().body(new Erro("Erro ao Alterar Estoque"));
+            }
+        }
+        else
+        {
+            return ResponseEntity.badRequest().body(new Erro("Quantidade Errada"));
+        }
+
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAnuncio(@PathVariable long id)
     {

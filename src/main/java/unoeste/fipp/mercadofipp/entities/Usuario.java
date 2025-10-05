@@ -74,6 +74,7 @@ public class Usuario{
     //será notificado a todo momento que o estoque for atualizado
     public void atualizarChegadaProduto(int quantidade) {
         //essa quantidade é o novo estoque do meu produto
+        System.out.println("Usuario: "+this.id);
         System.out.print("Produto com mais estoque. ");
         System.out.println(quantidade+" em estoque do produto!");
     }
