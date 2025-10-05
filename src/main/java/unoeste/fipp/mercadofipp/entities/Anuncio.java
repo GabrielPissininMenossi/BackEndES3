@@ -13,11 +13,13 @@ import java.util.List;
 @Entity
 @Table(name = "anuncio")
 public class Anuncio {
-    //realizando o teste
+    //chave primária
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "anu_id")
     private Long id;
+
+    //colunas comuns
     @Column(name = "anu_title")
     private String titulo;
     @Column(name = "anu_date")
@@ -26,39 +28,47 @@ public class Anuncio {
     private String descricao;
     @Column(name = "anu_price")
     private double preco;
-
     @Column(name = "anu_est")
     private int estoque;
     @Column(name = "anu_peso")
-    private double peso; //peso único
+    private double peso;
 
-    //observers
-    @OneToMany(mappedBy = "anuncio")//essa tabela irá conter o muitos para muitos de usuario e item
-    private List<Anuncio_Observer> observers;
-
+    //colunas de chaves estrangeiras
     @ManyToOne
     @JoinColumn(name = "usr_id")
     private Usuario usuario; //quem faz o anúncio
-
     @ManyToOne
     @JoinColumn(name = "cat_id")
     private Categoria categoria;
+
+    //chaves estrangeiras que NÃO estão nessa tabela
     @OneToMany(mappedBy = "anuncio")
-    private List<Pergunta> perguntas;
+    private List<Pergunta> perguntas; //tabela de perguntas
     @OneToMany(mappedBy = "anuncio")
-    private List<Foto> foto;
+    private List<Foto> foto; //tabela de fotos
+    @OneToMany(mappedBy = "anuncio")
+    private List<Anuncio_Observer> observers; //tabela de relacionamento dos observers -> tabela intermediária muitos para muitos
 
     public Anuncio(Long id, String titulo, LocalDate data, String descricao, double preco, int estoque, double peso, Categoria categoria, Usuario usuario) {
+        //chave primária
         this.id = id;
+
+        //outros atributos
         this.titulo = titulo;
         this.data = data;
         this.descricao = descricao;
         this.preco = preco;
+        this.estoque = estoque;
+        this.peso = peso;
+
+        //chaves estrangeiras
         this.usuario = usuario;
         this.categoria = categoria;
+
+        //inicialização das listas
         this.observers = new ArrayList<>();
-        this.peso = peso;
-        this.estoque = estoque;
+        this.perguntas = new ArrayList<>();
+        this.foto = new ArrayList<>();
     }
 
     public Anuncio() {
