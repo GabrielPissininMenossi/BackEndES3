@@ -81,6 +81,7 @@ public class Usuario{
 
     public void atualizarVendaProduto(int quantidade){
         //essa quantidade é o novo estoque do meu produto
+        System.out.println("Usuario: "+this.id);
         System.out.print("Produto com menos estoque. ");
         System.out.println(quantidade+" em estoque do produto!!");
     }

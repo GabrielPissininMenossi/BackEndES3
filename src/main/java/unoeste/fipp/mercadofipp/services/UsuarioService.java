@@ -28,15 +28,8 @@ public class UsuarioService {
         try {
             Usuario aux = usuarioRepository.getUsuarioByNome(usuario.getNome());
             if(aux == null)
-            {
-                Usuario novoUsuario = usuarioRepository.save(usuario);
-                return usuarioRepository.save(novoUsuario);
-            }
-            else
-            {
-                return null;
-            }
-
+                return usuarioRepository.save(usuario);
+            return null;
         }catch (Exception e){
             return null;
         }
@@ -50,8 +43,7 @@ public class UsuarioService {
              usuarioRepository.delete(usuario);
              return true;
         }
-        else
-            return false;
+        return false;
     }
 
     public String logar(String nome, String senha)

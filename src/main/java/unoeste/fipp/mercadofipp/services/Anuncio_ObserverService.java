@@ -2,7 +2,9 @@ package unoeste.fipp.mercadofipp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import unoeste.fipp.mercadofipp.entities.Anuncio;
 import unoeste.fipp.mercadofipp.entities.Anuncio_Observer;
+import unoeste.fipp.mercadofipp.entities.Usuario;
 import unoeste.fipp.mercadofipp.repositories.Anuncio_ObserverRepository;
 
 import java.util.List;
@@ -20,16 +22,23 @@ public class Anuncio_ObserverService {
     {
         return anuncio_observerRepository.findById(id).orElse(null);
     }
-    public Anuncio_Observer save(Anuncio_Observer anuncioObserver)
+    public Anuncio_Observer save(long anu_id, long usr_id)
     {
         try{
-            Anuncio_Observer anuncioObserver1 = anuncio_observerRepository.save(anuncioObserver);
-            return anuncio_observerRepository.save(anuncioObserver1);
-
+            //verificar se existe o respectivo anuncio e o usuario
+            AnuncioService anuncioService = new AnuncioService();
+            UsuarioService usuarioService = new UsuarioService();
+            Anuncio anuncio = anuncioService.getId(anu_id);
+            Usuario usuario = usuarioService.getId(usr_id);
+            if(anuncio != null && usuario != null) //existe, posso adicionar o observer
+            {
+                return anuncio_observerRepository.save(new Anuncio_Observer(0L, anuncio, usuario));
+            }
         }
         catch (Exception e){
             return null;
         }
+        return null;
     }
 
     public boolean delete(long id)

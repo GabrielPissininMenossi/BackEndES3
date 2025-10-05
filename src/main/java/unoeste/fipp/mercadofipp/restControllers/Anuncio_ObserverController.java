@@ -5,9 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unoeste.fipp.mercadofipp.entities.Anuncio_Observer;
 import unoeste.fipp.mercadofipp.entities.Erro;
-import unoeste.fipp.mercadofipp.services.AnuncioService;
 import unoeste.fipp.mercadofipp.services.Anuncio_ObserverService;
-
 
 import java.util.List;
 
@@ -25,9 +23,9 @@ public class Anuncio_ObserverController
         List<Anuncio_Observer> anuncio_observerList = anuncio_observerService.getAll();
         if (anuncio_observerList.size() > 0)
             return ResponseEntity.ok().body(anuncio_observerList);
-        else
-            return ResponseEntity.badRequest().body(new Erro("Nenhum Observer Encontrado no Anuncio "));
+        return ResponseEntity.badRequest().body(new Erro("Nenhum Observer Encontrado no Anuncio "));
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getID(@PathVariable long id)
     {
@@ -38,18 +36,13 @@ public class Anuncio_ObserverController
     }
 
     //adicionar um observer
-    @PostMapping
-    public ResponseEntity<Object> addObserver(@RequestBody Anuncio_Observer anuncioObserver)
+    @PostMapping("/{anu_id}/{usr_id}")
+    public ResponseEntity<Object> addObserver(@PathVariable long anu_id, @PathVariable long usr_id)
     {
-        Anuncio_Observer novoAnuncioObserver = anuncio_observerService.save(anuncioObserver);
+        Anuncio_Observer novoAnuncioObserver = anuncio_observerService.save(anu_id, usr_id);
         if(novoAnuncioObserver != null)
-        {
             return ResponseEntity.noContent().build();
-        }
-        else
-        {
-            return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Observer!!"));
-        }
+        return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Observer!!"));
     }
 
     //já trata se existe as duas chaves no service
@@ -58,8 +51,7 @@ public class Anuncio_ObserverController
     {
         if(anuncio_observerService.delete(id))
             return ResponseEntity.noContent().build();
-        else
-            return ResponseEntity.badRequest().body(new Erro("Erro ao Apagar Observer"));
+        return ResponseEntity.badRequest().body(new Erro("Erro ao Apagar Observer"));
     }
 
 }

@@ -1,6 +1,10 @@
 package unoeste.fipp.mercadofipp.entities;
 
 import jakarta.persistence.*;
+import unoeste.fipp.mercadofipp.entities.abstratas.Comercio;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "venda")
@@ -9,24 +13,22 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ven_id")
     private Long id;
-    @Column(name = "ven_peso")
-    private Double peso;
-    @Column(name = "ven_preco")
-    private double preco;
 
     @ManyToOne
     @JoinColumn(name = "usr_id")
     private Usuario usuario;
 
-    public Venda(Long id, double peso, double preco, Usuario usuario) {
+    @OneToMany(mappedBy = "venda")//essa tabela irá conter o muitos para muitos de usuario e item
+    private List<Item> item;
+
+    public Venda(Long id, Usuario usuario) {
         this.id = id;
-        this.peso = peso;
-        this.preco = preco;
         this.usuario = usuario;
+        this.item = new ArrayList<>();
     }
 
     public Venda() {
-        this(0L,0,0,null);
+        this(0L,null);
     }
 
     public Long getId() {
@@ -37,27 +39,19 @@ public class Venda {
         this.id = id;
     }
 
-    public Double getPeso() {
-        return peso;
-    }
-
-    public void setPeso(Double peso) {
-        this.peso = peso;
-    }
-
-    public double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(double preco) {
-        this.preco = preco;
-    }
-
     public Usuario getUsuario() {
         return usuario;
     }
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public List<Item> getItens() {
+        return item;
+    }
+
+    public void setItens(List<Item> itens) {
+        this.item = itens;
     }
 }

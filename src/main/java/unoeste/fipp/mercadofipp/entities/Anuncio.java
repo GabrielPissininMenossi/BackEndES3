@@ -1,6 +1,7 @@
 package unoeste.fipp.mercadofipp.entities;
 
 import jakarta.persistence.*;
+import unoeste.fipp.mercadofipp.entities.abstratas.Comercio;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
  * */
 @Entity
 @Table(name = "anuncio")
-public class Anuncio {
+public class Anuncio{
     //realizando o teste
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -151,6 +152,14 @@ public class Anuncio {
         }
     }
 
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
+    }
+
     //adicionar observers na minha lista
     public void addObserver(Anuncio_Observer anuncioObserver) {
         if(!this.observers.contains(anuncioObserver)) {
@@ -190,13 +199,5 @@ public class Anuncio {
                 }
             }
         }
-    }
-
-    public double getPeso() {
-        return peso;
-    }
-
-    public void setPeso(double peso) {
-        this.peso = peso;
     }
 }

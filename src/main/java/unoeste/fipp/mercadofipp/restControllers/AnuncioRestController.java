@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import unoeste.fipp.mercadofipp.entities.Anuncio;
+import unoeste.fipp.mercadofipp.entities.CCompra;
 import unoeste.fipp.mercadofipp.entities.Erro;
+import unoeste.fipp.mercadofipp.entities.abstratas.Comercio;
 import unoeste.fipp.mercadofipp.services.AnuncioService;
 
 import java.util.List;
@@ -28,6 +30,7 @@ public class AnuncioRestController
         else
             return ResponseEntity.badRequest().body(new Erro("Nenhum Anuncio Encontrado"));
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object>getId(@PathVariable long id)
     {
@@ -37,6 +40,7 @@ public class AnuncioRestController
         else
             return ResponseEntity.badRequest().body(new Erro("Anuncio Não Encontrado"));
     }
+
     @GetMapping(value = "/get-anuncio/{filtro}")
     public ResponseEntity<Object> getAnuncioFiltro(@PathVariable(value = "filtro") String filtro)
     {
@@ -47,6 +51,7 @@ public class AnuncioRestController
         else
             return ResponseEntity.badRequest().body(new Erro("Nenhum Anuncio Encontrado Com o Filtro Selecionado"));
     }
+
     @GetMapping("/get-por-usuario/{id}")
     public ResponseEntity<Object> getIdUsuario (@PathVariable long id)
     {
@@ -64,6 +69,7 @@ public class AnuncioRestController
             return ResponseEntity.noContent().build();
         return ResponseEntity.badRequest().body(new Erro("Erro ao adicionar fotos!"));
     }
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> addAnuncio(@RequestPart("anuncio") Anuncio anuncio, @RequestPart("fotos") MultipartFile[] fotos) {
         Anuncio novo = anuncioService.save(anuncio, fotos);
@@ -71,6 +77,7 @@ public class AnuncioRestController
             return ResponseEntity.ok(anuncio);
         return ResponseEntity.badRequest().body(new Erro("Erro ao cadastrar anúncio!"));
     }
+
     @PostMapping("add-pergunta/{id}/{texto}")
     public ResponseEntity<Object> addPergunta(@PathVariable(name = "id") long idAnuncio,@PathVariable(name = "texto") String texto)
     {
@@ -83,6 +90,7 @@ public class AnuncioRestController
             return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Pergunta"));
         }
     }
+
     @PostMapping("add-resposta/{id}/{resposta}")
     public ResponseEntity<Object> addResposta(@PathVariable (name = "id") long idPergunta, @PathVariable (name = "resposta") String resposta)
     {
@@ -106,7 +114,6 @@ public class AnuncioRestController
                 anuncio.setEstoque(qtde);
                 anuncioService.save(anuncio,null);
                 return ResponseEntity.ok(anuncio);
-
             }
             else
             {
