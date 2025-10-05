@@ -39,25 +39,13 @@ public class VendaRestController
         else
             return ResponseEntity.badRequest().body(new Erro("Venda Não Encontrada"));
     }
-
-    @PostMapping("/venda")
+    @PostMapping
     public ResponseEntity<Object> addVenda(@RequestBody Venda venda)
     {
-        Venda novaVenda = vendaService.saveVenda(venda);
+        Venda novaVenda = vendaService.save(venda);
         if(novaVenda != null)
         {
             return ResponseEntity.ok(venda);
-        }
-        else
-            return ResponseEntity.badRequest().body(new Erro("Erro ao Cadastrar Nova Venda"));
-    }
-    @PostMapping("/compra")
-    public ResponseEntity<Object> addCompra(@RequestBody Venda compra)
-    {
-        Venda novaCompra = vendaService.saveCompra(compra);
-        if(novaCompra != null)
-        {
-            return ResponseEntity.ok(compra);
         }
         else
             return ResponseEntity.badRequest().body(new Erro("Erro ao Cadastrar Nova Venda"));

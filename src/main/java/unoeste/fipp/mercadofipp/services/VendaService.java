@@ -2,8 +2,6 @@ package unoeste.fipp.mercadofipp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import unoeste.fipp.mercadofipp.entities.CCompra;
-import unoeste.fipp.mercadofipp.entities.CVenda;
 import unoeste.fipp.mercadofipp.entities.Venda;
 import unoeste.fipp.mercadofipp.entities.abstratas.Comercio;
 import unoeste.fipp.mercadofipp.repositories.AnuncioRepository;
@@ -37,10 +35,8 @@ public class VendaService
     public Venda save(Venda venda)
     {
         try{
-            Venda teste = vendaRepository.getById(venda.getId());
-            if(teste == null) //se não existe eu salvo um novo
-                return vendaRepository.save(venda);
-            return null;
+            Venda novaVenda = vendaRepository.save(venda);
+            return vendaRepository.save(novaVenda);
         }catch (Exception e){
             return null;
         }
@@ -56,15 +52,4 @@ public class VendaService
         return false;
     }
 
-    public Venda saveCompra(Venda compra)
-    {
-        Comercio comercio = new CCompra();
-        comercio.templateMethod();
-    }
-
-    public Venda saveVenda(Venda venda) // preciso diminuir o estoque do anuncio
-    {
-        Comercio comercio = new CVenda();
-        comercio.gravar();
-    }
 }
