@@ -1,6 +1,8 @@
 package unoeste.fipp.mercadofipp.entities;
 
 import jakarta.persistence.*;
+import unoeste.fipp.mercadofipp.entities.interfaces.Observable;
+import unoeste.fipp.mercadofipp.entities.interfaces.Observer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "anuncio")
-public class Anuncio implements Observable{
+public class Anuncio implements Observable {
     //chave primária
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +49,12 @@ public class Anuncio implements Observable{
     @OneToMany(mappedBy = "anuncio")
     private List<Foto> foto; //tabela de fotos
 
-    @ManyToMany(mappedBy = "anuncios")
+    @ManyToMany
+    @JoinTable(
+            name = "anuncio_observer", // nome da tabela intermediária
+            joinColumns = @JoinColumn(name = "anu_id"), // coluna que representa este anúncio
+            inverseJoinColumns = @JoinColumn(name = "usr_id") // coluna que representa o usuário
+    )
     private List<Usuario> observers;
 
     public Anuncio(Long id, String titulo, LocalDate data, String descricao, double preco, int estoque, double peso, Categoria categoria, Usuario usuario) {
@@ -171,41 +178,13 @@ public class Anuncio implements Observable{
         this.peso = peso;
     }
 
-//    //adicionar observers na minha lista
-//    public void addObserver(Anuncio_Observer anuncioObserver) {
-//        if (!this.observers.contains(anuncioObserver)) {
-//            observers.add(anuncioObserver);
-//        }
-//    }
-//
-//    public void removeObserver(Anuncio_Observer anuncioObserver) {
-//        if (this.observers.contains(anuncioObserver)) {
-//            this.observers.remove(anuncioObserver);
-//        }
-//    }
-//
-//    private void notificarObservers(int quantidade) {
-//        //avisa os usuários
-//        if (this.estoque < quantidade) {
-//            //item foi icrementado
-//            //  comprei mais
-//
-//            //aviso sobre compra de estoque, mais disponíveis para a venda
-//            for (Anuncio_Observer u : this.observers) {
-//                u.getUsuario().atualizarChegadaProduto(quantidade);
-//            }
-//        } else {
-//            if (this.estoque > quantidade) {
-//                //item foi decrementado
-//                //  vendi e/ou saiu do estoque
-//
-//                //aviso sobre venda, estoque acabando
-//                for (Anuncio_Observer u : this.observers) {
-//                    u.getUsuario().atualizarVendaProduto(quantidade);
-//                }
-//            }
-//        }
-//    }
+    public List<Usuario> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(List<Usuario> observers) {
+        this.observers = observers;
+    }
 
     @Override
     public void addObserver(Observer observer) {
@@ -223,23 +202,10 @@ public class Anuncio implements Observable{
 
     @Override
     public void notificar(int quantidade) {
-        if (this.estoque < quantidade) {
-            //item foi icrementado
-            //  comprei mais
-
-            //aviso sobre compra de estoque, mais disponíveis para a venda
+        if (this.estoque != quantidade) {
+            //aviso sobre mudança no estoque
             for (Usuario u : this.observers) {
-                u.atualizarChegadaProduto(quantidade);
-            }
-        } else {
-            if (this.estoque > quantidade) {
-                //item foi decrementado
-                //  vendi e/ou saiu do estoque
-
-                //aviso sobre venda, estoque acabando
-                for (Usuario u : this.observers) {
-                    u.atualizarVendaProduto(quantidade);
-                }
+                u.atualizarEstoque(quantidade);
             }
         }
     }

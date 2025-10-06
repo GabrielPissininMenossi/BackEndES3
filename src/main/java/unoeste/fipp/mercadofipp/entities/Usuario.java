@@ -1,8 +1,7 @@
 package unoeste.fipp.mercadofipp.entities;
 
 import jakarta.persistence.*;
-
-import java.util.List;
+import unoeste.fipp.mercadofipp.entities.interfaces.Observer;
 
 /**
  * Essa classe será avisada sobre uma mudança nos itens que a mesma está observando
@@ -10,7 +9,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "usuario")
-public class Usuario implements Observer{
+public class Usuario implements Observer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usr_id")
@@ -21,14 +20,6 @@ public class Usuario implements Observer{
     private String senha;
     @Column(name = "usr_level")
     private String nivel;
-
-    @ManyToMany
-    @JoinTable(
-            name = "anuncio_observer", // nome da tabela intermediária no banco
-            joinColumns = @JoinColumn(name = "usu_id"), // chave estrangeira do usuário
-            inverseJoinColumns = @JoinColumn(name = "anu_id") // chave estrangeira do anúncio
-    )
-    private List<Anuncio> anuncios;
 
     //Construtores
     public Usuario(Long id, String nome, String senha, String nivel) {
@@ -78,22 +69,6 @@ public class Usuario implements Observer{
     public void setNivel(String nivel) {
         this.nivel = nivel;
     }
-
-    //será notificado a todo momento que o estoque for atualizado
-    public void atualizarChegadaProduto(int quantidade) {
-        //essa quantidade é o novo estoque do meu produto
-        System.out.println("Usuario: " + this.id);
-        System.out.print("Produto com mais estoque. ");
-        System.out.println(quantidade + " em estoque do produto!");
-    }
-
-    public void atualizarVendaProduto(int quantidade) {
-        //essa quantidade é o novo estoque do meu produto
-        System.out.println("Usuario: " + this.id);
-        System.out.print("Produto com menos estoque. ");
-        System.out.println(quantidade + " em estoque do produto!!");
-    }
-
 
     @Override
     public void atualizarEstoque(int qtde) {

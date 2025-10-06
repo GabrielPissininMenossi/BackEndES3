@@ -1,11 +1,7 @@
-package unoeste.fipp.mercadofipp.entities;
-
-import java.util.ArrayList;
-import java.util.List;
+package unoeste.fipp.mercadofipp.entities.interfaces;
 
 public interface Observable
 {
-    List<Observer> observerList = new ArrayList<>();
     public void addObserver(Observer observer);
     public void removeObserver(Observer observer);
     public void notificar(int qtde);

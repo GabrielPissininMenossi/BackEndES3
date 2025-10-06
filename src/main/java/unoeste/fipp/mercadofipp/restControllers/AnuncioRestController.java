@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import unoeste.fipp.mercadofipp.entities.*;
-import unoeste.fipp.mercadofipp.repositories.AnuncioRepository;
-import unoeste.fipp.mercadofipp.repositories.UsuarioRepository;
 import unoeste.fipp.mercadofipp.services.AnuncioService;
 import unoeste.fipp.mercadofipp.services.UsuarioService;
 
@@ -21,10 +19,7 @@ public class AnuncioRestController {
     private AnuncioService anuncioService;
     @Autowired
     private UsuarioService usuarioService;
-    @Autowired
-    private AnuncioRepository anuncioRepository;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+
     @GetMapping
     public ResponseEntity<Object> getAll() {
         List<Anuncio> anuncioList = anuncioService.getAll();
@@ -96,13 +91,27 @@ public class AnuncioRestController {
         }
     }
 
+    //aplicando o template method
     @PostMapping("/compra/{id}/{qtde}")
     public ResponseEntity<Object> addEstoque(@PathVariable Long id, @PathVariable int qtde) {
         //qtde será somada com o estoque atual
         Anuncio anuncio = anuncioService.getId(id);
         if (anuncio != null && qtde > 0) {
             CCompra compra = new CCompra();
-            compra.atualizarEstoque(anuncio, qtde);
+            compra.gravar(anuncio, qtde);
+            if (anuncioService.save(anuncio, null) != null) {
+                return ResponseEntity.ok(anuncio);
+            }
+        }
+        return ResponseEntity.badRequest().body(new Erro("Erro ao Cadastrar Nova Venda"));
+    }
+    @PostMapping("/venda/{id}/{qtde}")
+    public ResponseEntity<Object> tiraEstoque(@PathVariable Long id, @PathVariable int qtde) {
+        //qtde será subtraída com o estoque atual
+        Anuncio anuncio = anuncioService.getId(id);
+        if (anuncio != null && qtde > 0) {
+            CVenda venda = new CVenda();
+            venda.gravar(anuncio, qtde);
             if (anuncioService.save(anuncio, null) != null) {
                 return ResponseEntity.ok(anuncio);
             }
@@ -110,18 +119,47 @@ public class AnuncioRestController {
         return ResponseEntity.badRequest().body(new Erro("Erro ao Cadastrar Nova Venda"));
     }
 
-    @PostMapping("/venda/{id}/{qtde}")
-    public ResponseEntity<Object> tiraEstoque(@PathVariable Long id, @PathVariable int qtde) {
-        //qtde será subtraída com o estoque atual
-        Anuncio anuncio = anuncioService.getId(id);
-        if (anuncio != null && qtde > 0) {
-            CVenda venda = new CVenda();
-            venda.atualizarEstoque(anuncio, qtde);
-            if (anuncioService.save(anuncio, null) != null) {
-                return ResponseEntity.ok(anuncio);
+    //adicionar um observer -> Observer Method
+    @PostMapping("/addobserver/{anu_id}/{usr_id}")
+    public ResponseEntity<Object> addObserver(@PathVariable long anu_id, @PathVariable long usr_id) {
+        Anuncio anuncio = anuncioService.getId(anu_id); //pegar o respectivo anuncio
+        if (anuncio != null) {
+            Usuario usuario = usuarioService.getId(usr_id); //pegar o respectivo usuário
+            if (usuario != null) {
+                //salvar no banco
+                if (!anuncio.getObservers().contains(usuario)) { //se ainda não existe
+                    anuncio.addObserver(usuario);
+                    anuncioService.save(anuncio, null);
+                    return ResponseEntity.ok(anuncio);
+                } else //já existe esse usuário observando esse anuncio
+                {
+                    return ResponseEntity.badRequest().body(new Erro("Esse usuario ja observa esse Anuncio!!"));
+                }
             }
         }
-        return ResponseEntity.badRequest().body(new Erro("Erro ao Cadastrar Nova Venda"));
+        return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Observer!!"));
+    }
+
+    //adicionar um observer -> Observer Method
+    @DeleteMapping("/deleteobserver/{anu_id}/{usr_id}")
+    public ResponseEntity<Object> deleteObserver(@PathVariable long anu_id, @PathVariable long usr_id) {
+        Anuncio anuncio = anuncioService.getId(anu_id); //pegar o respectivo anuncio
+        if (anuncio != null) {
+            Usuario usuario = usuarioService.getId(usr_id); //pegar o respectivo usuário
+            if (usuario != null) {
+                //remover do banco
+                if (anuncio.getObservers().contains(usuario)) { //se existe
+                    anuncio.removeObserver(usuario);
+                    anuncioService.save(anuncio, null);
+                    return ResponseEntity.ok(anuncio);
+                }
+                else
+                {
+                    return ResponseEntity.badRequest().body(new Erro("Esse usuario nao observa esse Anuncio!!"));
+                }
+            }
+        }
+        return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Observer!!"));
     }
 
     @DeleteMapping("/{id}")
@@ -130,24 +168,5 @@ public class AnuncioRestController {
             return ResponseEntity.noContent().build();
         else
             return ResponseEntity.badRequest().body(new Erro("Erro ao Apagar Anuncio"));
-    }
-    @PostMapping("/add/{id_anuncio}/{id_usuario}")
-    public ResponseEntity<Object> addObserver(@PathVariable long id_anuncio, @PathVariable long id_usuario) {
-
-        System.out.println(id_anuncio);
-        System.out.println(id_usuario);
-        Anuncio anuncio = anuncioRepository.findById(id_anuncio).orElse(null);
-        Usuario usuario = usuarioRepository.findById(id_usuario).orElse(null);
-        System.out.println("deu certo");
-        anuncio.addObserver(usuario);
-        System.out.println("adicionei");
-        Anuncio_ObserverService anuncio_observerService = new Anuncio_ObserverService();
-        Anuncio_Observer anuncio_observer = new Anuncio_Observer(0L, anuncio, usuario);
-        if (anuncio_observer != null)
-        {
-            anuncio_observerService.save(anuncio_observer);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Observer!!"));
     }
 }

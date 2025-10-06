@@ -1,4 +1,4 @@
-package unoeste.fipp.mercadofipp.entities;
+package unoeste.fipp.mercadofipp.entities.interfaces;
 
 public interface Observer
 {
