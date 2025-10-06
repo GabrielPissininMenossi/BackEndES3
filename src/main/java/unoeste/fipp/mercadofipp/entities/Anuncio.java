@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "anuncio")
-public class Anuncio {
+public class Anuncio implements Observable{
     //chave primária
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,8 +46,9 @@ public class Anuncio {
     private List<Pergunta> perguntas; //tabela de perguntas
     @OneToMany(mappedBy = "anuncio")
     private List<Foto> foto; //tabela de fotos
-    @OneToMany(mappedBy = "anuncio")
-    private List<Anuncio_Observer> observers; //tabela de relacionamento dos observers -> tabela intermediária muitos para muitos
+
+    @ManyToMany(mappedBy = "anuncios")
+    private List<Usuario> observers;
 
     public Anuncio(Long id, String titulo, LocalDate data, String descricao, double preco, int estoque, double peso, Categoria categoria, Usuario usuario) {
         //chave primária
@@ -155,7 +156,7 @@ public class Anuncio {
         if (estoque > -1) //se é uma quantidade válida
         {
             //notifico
-            notificarObservers(estoque);
+            notificar(estoque);
 
             //atualiza a informação da quantidade
             this.estoque = estoque;
@@ -170,28 +171,65 @@ public class Anuncio {
         this.peso = peso;
     }
 
-    //adicionar observers na minha lista
-    public void addObserver(Anuncio_Observer anuncioObserver) {
-        if (!this.observers.contains(anuncioObserver)) {
-            observers.add(anuncioObserver);
+//    //adicionar observers na minha lista
+//    public void addObserver(Anuncio_Observer anuncioObserver) {
+//        if (!this.observers.contains(anuncioObserver)) {
+//            observers.add(anuncioObserver);
+//        }
+//    }
+//
+//    public void removeObserver(Anuncio_Observer anuncioObserver) {
+//        if (this.observers.contains(anuncioObserver)) {
+//            this.observers.remove(anuncioObserver);
+//        }
+//    }
+//
+//    private void notificarObservers(int quantidade) {
+//        //avisa os usuários
+//        if (this.estoque < quantidade) {
+//            //item foi icrementado
+//            //  comprei mais
+//
+//            //aviso sobre compra de estoque, mais disponíveis para a venda
+//            for (Anuncio_Observer u : this.observers) {
+//                u.getUsuario().atualizarChegadaProduto(quantidade);
+//            }
+//        } else {
+//            if (this.estoque > quantidade) {
+//                //item foi decrementado
+//                //  vendi e/ou saiu do estoque
+//
+//                //aviso sobre venda, estoque acabando
+//                for (Anuncio_Observer u : this.observers) {
+//                    u.getUsuario().atualizarVendaProduto(quantidade);
+//                }
+//            }
+//        }
+//    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        if (!this.observers.contains((Usuario) observer)) {
+            observers.add((Usuario) observer);
         }
     }
 
-    public void removeObserver(Anuncio_Observer anuncioObserver) {
-        if (this.observers.contains(anuncioObserver)) {
-            this.observers.remove(anuncioObserver);
+    @Override
+    public void removeObserver(Observer observer) {
+        if (this.observers.contains(observer)) {
+           this.observers.remove(observer);
         }
     }
 
-    private void notificarObservers(int quantidade) {
-        //avisa os usuários
+    @Override
+    public void notificar(int quantidade) {
         if (this.estoque < quantidade) {
             //item foi icrementado
             //  comprei mais
 
             //aviso sobre compra de estoque, mais disponíveis para a venda
-            for (Anuncio_Observer u : this.observers) {
-                u.getUsuario().atualizarChegadaProduto(quantidade);
+            for (Usuario u : this.observers) {
+                u.atualizarChegadaProduto(quantidade);
             }
         } else {
             if (this.estoque > quantidade) {
@@ -199,8 +237,8 @@ public class Anuncio {
                 //  vendi e/ou saiu do estoque
 
                 //aviso sobre venda, estoque acabando
-                for (Anuncio_Observer u : this.observers) {
-                    u.getUsuario().atualizarVendaProduto(quantidade);
+                for (Usuario u : this.observers) {
+                    u.atualizarVendaProduto(quantidade);
                 }
             }
         }

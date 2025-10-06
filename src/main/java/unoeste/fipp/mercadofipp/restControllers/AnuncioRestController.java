@@ -6,7 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import unoeste.fipp.mercadofipp.entities.*;
+import unoeste.fipp.mercadofipp.repositories.AnuncioRepository;
+import unoeste.fipp.mercadofipp.repositories.UsuarioRepository;
 import unoeste.fipp.mercadofipp.services.AnuncioService;
+import unoeste.fipp.mercadofipp.services.UsuarioService;
 
 import java.util.List;
 
@@ -16,7 +19,12 @@ import java.util.List;
 public class AnuncioRestController {
     @Autowired
     private AnuncioService anuncioService;
-
+    @Autowired
+    private UsuarioService usuarioService;
+    @Autowired
+    private AnuncioRepository anuncioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
     @GetMapping
     public ResponseEntity<Object> getAll() {
         List<Anuncio> anuncioList = anuncioService.getAll();
@@ -123,5 +131,23 @@ public class AnuncioRestController {
         else
             return ResponseEntity.badRequest().body(new Erro("Erro ao Apagar Anuncio"));
     }
+    @PostMapping("/add/{id_anuncio}/{id_usuario}")
+    public ResponseEntity<Object> addObserver(@PathVariable long id_anuncio, @PathVariable long id_usuario) {
 
+        System.out.println(id_anuncio);
+        System.out.println(id_usuario);
+        Anuncio anuncio = anuncioRepository.findById(id_anuncio).orElse(null);
+        Usuario usuario = usuarioRepository.findById(id_usuario).orElse(null);
+        System.out.println("deu certo");
+        anuncio.addObserver(usuario);
+        System.out.println("adicionei");
+        Anuncio_ObserverService anuncio_observerService = new Anuncio_ObserverService();
+        Anuncio_Observer anuncio_observer = new Anuncio_Observer(0L, anuncio, usuario);
+        if (anuncio_observer != null)
+        {
+            anuncio_observerService.save(anuncio_observer);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().body(new Erro("Erro ao Gravar Observer!!"));
+    }
 }

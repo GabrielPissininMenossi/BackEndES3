@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario implements Observer{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usr_id")
@@ -21,6 +21,14 @@ public class Usuario {
     private String senha;
     @Column(name = "usr_level")
     private String nivel;
+
+    @ManyToMany
+    @JoinTable(
+            name = "anuncio_observer", // nome da tabela intermediária no banco
+            joinColumns = @JoinColumn(name = "usu_id"), // chave estrangeira do usuário
+            inverseJoinColumns = @JoinColumn(name = "anu_id") // chave estrangeira do anúncio
+    )
+    private List<Anuncio> anuncios;
 
     //Construtores
     public Usuario(Long id, String nome, String senha, String nivel) {
@@ -87,4 +95,10 @@ public class Usuario {
     }
 
 
+    @Override
+    public void atualizarEstoque(int qtde) {
+        System.out.println("Usuario: " + this.id);
+        System.out.print("Produto com novo estoque. ");
+        System.out.println(qtde + " em estoque do produto!");
+    }
 }
